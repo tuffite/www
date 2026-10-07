@@ -1,0 +1,22 @@
+{
+  "name": "Tuffite",
+  "short_name": "Tuffite",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf9f6",
+  "theme_color": "#1c332b",
+  "icons": [
+    {
+      "src": "/icons/tuffite-square-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/tuffite-square-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

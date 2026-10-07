@@ -1,0 +1,16 @@
+node_modules/
+dist/
+public/api/rust/
+src/reference.generated.json
+public/schema/
+
+# Machine settings and credentials
+.env
+.env.*
+!.env.example
+mise.local.toml
+
+.cache/
+
+public/LICENSE.txt
+public/THIRD_PARTY_NOTICES.txt
