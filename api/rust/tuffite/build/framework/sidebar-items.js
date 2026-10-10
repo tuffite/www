@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["AUTO_DOWNLOAD_ENV","CACHE_ENV","DIR_ENV","DOWNLOAD_DIR_ENV","ENV_VARS","FRAMEWORK_ENV","MANIFEST_FILE","PROGRESS_ENV","RELEASE_TAG_ENV","REPOSITORY_ENV","TARGET_ENV"],"fn":["cache_root","host_target","progress_enabled","release_asset_name","resolve"],"struct":["Distribution","FileEntry","Manifest","Resolver"]};

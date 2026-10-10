@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["JavaScriptExtensionError"],"struct":["JavaScriptExtensionHost","JavaScriptExtensionPackage","JavaScriptExtensionSessionHandle"]};

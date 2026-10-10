@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Capabilities","Capture","InjectInput","ProcessSignal","SendInput","Start","Stats","Stop","TakeSignals"]};

@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#faf9f6"/><meta name="description" content="Native facades and declaration contracts, straight from source."/>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" sizes="any"/>
+<link rel="icon" type="image/png" href="/icons/tuffite-rounded-32.png" sizes="32x32"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180"/>
+<link rel="manifest" href="/site.webmanifest"/><title>JavaScript &amp; ShellAPI | Tuffite</title>
+<script>try{if(localStorage.getItem('tuffite-theme')==='dark')document.documentElement.classList.add('dark')}catch{}</script>
+  <script type="module" crossorigin src="/assets/index-DMCkx9SE.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-C48gV25s.css">
+<link rel="canonical" href="https://tuffite.org/en/references/javascript/"/><link rel="alternate" hreflang="en" href="https://tuffite.org/en/references/javascript/"/><link rel="alternate" hreflang="zh-CN" href="https://tuffite.org/zh/references/javascript/"/><meta property="og:title" content="JavaScript &amp; ShellAPI | Tuffite"/><meta property="og:description" content="Native facades and declaration contracts, straight from source."/><meta property="og:url" content="https://tuffite.org/en/references/javascript/"/></head><body><div id="root"><link rel="preload" as="image" href="/favicon.svg"/><a class="skip-link" href="#main-content">Skip to content</a><header class="topbar"><div class="topbar-inner"><a href="/en/guides/introduction/" class="brand"><img src="/favicon.svg" alt="" width="30" height="30"/><span>tuffite</span><span class="version">0.1</span></a><nav class="top-navigation" aria-label="Main navigation"><a href="/en/guides/introduction/" class="">Guides</a><a href="/en/references/rust/" class="selected">References</a></nav><button class="search-trigger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><span>Search documentation…</span><kbd>⌘ K</kbd></button><div class="top-actions"><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9 mobile-search" aria-label="Search documentation…"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg></button><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 px-3 text-xs" aria-label="Change language"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-earth lucide-globe-2" aria-hidden="true"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"></path><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"></path><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"></path><circle cx="12" cy="12" r="10"></circle></svg><span>中文</span></button><span class="action-divider"></span><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9" aria-label="Toggle color theme"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg></button><a class="github-link" href="https://github.com/tuffite/tuffite" aria-label="GitHub" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-fork" aria-hidden="true"><circle cx="12" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"></path><path d="M12 12v3"></path></svg></a><button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9 mobile-menu" aria-label="Open navigation" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></div></header><div class="workspace"><aside class="sidebar " aria-label="Documentation navigation"><div class="sidebar-top"><span class="sidebar-eyebrow">DOCUMENTATION</span><span class="status-dot"></span></div><div class="nav-group"><div class="nav-group-title">Start here</div><a href="/en/guides/introduction/" class="nav-item "><span class="nav-bullet"></span><span>What is Tuffite?</span></a><a href="/en/guides/quick-start/" class="nav-item "><span class="nav-bullet"></span><span>Quick start</span></a></div><div class="nav-group"><div class="nav-group-title">Build an application</div><a href="/en/guides/create-app/" class="nav-item "><span class="nav-bullet"></span><span>Create a Rust application</span></a><a href="/en/guides/project-structure/" class="nav-item "><span class="nav-bullet"></span><span>Project structure</span></a><a href="/en/guides/commands/" class="nav-item "><span class="nav-bullet"></span><span>Call Rust from the frontend</span></a><a href="/en/guides/security/" class="nav-item "><span class="nav-bullet"></span><span>Capabilities &amp; security</span></a><a href="/en/guides/windows/" class="nav-item "><span class="nav-bullet"></span><span>Windows &amp; Explorer</span></a><a href="/en/guides/process-model/" class="nav-item "><span class="nav-bullet"></span><span>Browser &amp; utility processes</span></a><a href="/en/guides/distribution/" class="nav-item "><span class="nav-bullet"></span><span>Build &amp; distribute</span></a></div><div class="nav-group"><div class="nav-group-title">Contribute to the framework</div><a href="/en/guides/framework/" class="nav-item "><span class="nav-bullet"></span><span>Framework contributor setup</span></a><a href="/en/guides/patch-boundaries/" class="nav-item "><span class="nav-bullet"></span><span>Chromium patch boundaries</span></a><a href="/en/guides/rolls/" class="nav-item "><span class="nav-bullet"></span><span>Dependency rolls &amp; recovery</span></a><a href="/en/guides/testing/" class="nav-item "><span class="nav-bullet"></span><span>Test &amp; package the Framework</span></a><a href="/en/guides/playground/" class="nav-item "><span class="nav-bullet"></span><span>Develop Playground</span></a></div><div class="nav-group"><div class="nav-group-title">References</div><a href="/en/references/explorer/" class="nav-item "><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>Explorer API</span></a><a href="/en/references/rust/" class="nav-item "><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>Rust API</span></a><a href="/en/references/javascript/" class="nav-item active" aria-current="page"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>JavaScript &amp; ShellAPI</span><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a><a href="/en/references/configuration/" class="nav-item "><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-braces-corner lucide-file-json-2" aria-hidden="true"><path d="M14 22h4a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v6"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M5 14a1 1 0 0 0-1 1v2a1 1 0 0 1-1 1 1 1 0 0 1 1 1v2a1 1 0 0 0 1 1"></path><path d="M9 22a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-2a1 1 0 0 0-1-1"></path></svg><span>tuffite.json</span></a><a href="/en/references/cli/" class="nav-item "><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-terminal" aria-hidden="true"><path d="M12 19h8"></path><path d="m4 17 6-6-6-6"></path></svg><span>tuff CLI</span></a></div><div class="sidebar-footer"><span>Built with Rust. Powered by Chromium.</span><a href="https://tuffite.org">tuffite.org <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></div></aside><main id="main-content" tabindex="-1" class="main"><div class="breadcrumbs"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>References</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg><span>JavaScript &amp; ShellAPI</span></div><article><div class="article-eyebrow">THE CONTRACT, IN DETAIL</div><h1>JavaScript &amp; ShellAPI</h1><p class="article-description">Native facades and declaration contracts, straight from source.</p><section id="usage" class="doc-section"><h2><a href="#usage">Use the generated native facade<span class="heading-anchor">#</span></a></h2><p>Native methods return promises and require a matching origin capability. The following contracts are generated from the Framework’s checked-in TypeScript declarations. bigint values, opaque handles, and binary payloads retain their declared codec semantics.</p><div class="code-block"><div class="code-heading"><span>javascript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>import &#x27;/tuffite-shell-api.js&#x27;;
+const windows = await window.tuffite.window.list();</code></pre><span class="sr-only" role="status"></span></div> <!-- --> <!-- --> <!-- --> <!-- --> </section><section id="bridge" class="doc-section"><h2><a href="#bridge">The window.tuffite bridge<span class="heading-anchor">#</span></a></h2><p>The native runtime exposes window.tuffite in eligible application and Explorer main documents. Its NativeBridge contract includes invoke(), postMessage(), addEventListener(), and removeEventListener(). Generated modules extend this same object with native facades such as tuffite.window. A normal browser tab does not provide the native bridge.</p> <!-- --> <!-- --> <!-- --> <!-- --> </section><section id="listeners" class="doc-section"><h2><a href="#listeners">Subscribe and unsubscribe to events<span class="heading-anchor">#</span></a></h2><p>Listeners use the EventTarget API. addEventListener(type, listener, options?) accepts a capture boolean or AddEventListenerOptions, including once and signal. removeEventListener(type, listener, options?) must use the same function and matching capture value. In React, subscribe in an effect and remove the listener in its cleanup.</p><ul><li>channel — native application events, with {channel, data: Uint8Array}. Decode data using your application event contract; it is not automatically JSON.</li><li>message — Explorer-tree JSON messages, with {data, from}. A business channel named message is still received through the channel event type.</li><li>navigation, open, popup, newwindow — bubbled Explorer requests with {url, disposition, userGesture, from}. dialog — an ExplorerDialogController with accept() and dismiss(). See Explorer API for propagation and ownership rules.</li></ul><div class="code-block"><div class="code-heading"><span>javascript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>const onChannel = (event) =&gt; {
+  const { channel, data } = event.detail; // data: Uint8Array
+  if (channel === &#x27;app:changed&#x27;) {
+    console.log(channel, data);
+  }
+};
+window.tuffite.addEventListener(&#x27;channel&#x27;, onChannel);
+
+// During component cleanup, use the same listener reference.
+window.tuffite.removeEventListener(&#x27;channel&#x27;, onChannel);</code></pre><span class="sr-only" role="status"></span></div> <!-- --> <!-- --> <!-- --> <!-- --> </section><section id="messages" class="doc-section"><h2><a href="#messages">Send Explorer messages<span class="heading-anchor">#</span></a></h2><p>postMessage(data, {to}?) returns Promise&lt;boolean&gt;. The default target is top; parent and browser-issued surface refs are also accepted. Data must be JSON-serializable. The browser validates routing and ownership. A true result reports acceptance and delivery or queueing, not a response from the recipient.</p><div class="code-block"><div class="code-heading"><span>javascript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>await window.tuffite.postMessage({ type: &#x27;ready&#x27; }, { to: &#x27;parent&#x27; });
+const onMessage = ({ detail: { data, from } }) =&gt; {
+  console.log(data, from);
+};
+window.tuffite.addEventListener(&#x27;message&#x27;, onMessage);
+// Later:
+window.tuffite.removeEventListener(&#x27;message&#x27;, onMessage);</code></pre><span class="sr-only" role="status"></span></div> <!-- --> <!-- --> <!-- --> <!-- --> </section><section id="invoke" class="doc-section"><h2><a href="#invoke">Low-level binary invocation<span class="heading-anchor">#</span></a></h2><p>invoke(channel, payload) returns Promise&lt;Uint8Array&gt; and requires the route’s native permission. It does not route through the Explorer tree or accept a to option. Use generated typed facades for normal application calls; they handle command identities, codecs, schema fingerprints, and protocol validation.</p><div class="code-block"><div class="code-heading"><span>javascript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>const response = await window.tuffite.invoke(route, binaryPayload);
+// binaryPayload and response are Uint8Array.</code></pre><span class="sr-only" role="status"></span></div> <!-- --> <!-- --> <!-- --> <!-- --> </section><section id="runtime" class="doc-section"><h2><a href="#runtime">Runtime helpers and errors<span class="heading-anchor">#</span></a></h2><p>tuffite/runtime exports TuffiteError, invokeBinary(), createCommandApi(), createTypedCommandApi(), and createFrameworkApi(), plus codec and bridge types. These helpers serve generated bindings and tooling. TuffiteError provides code and optional requestId/cause. The package is served as /tuffite-runtime.js in native application packages.</p> <!-- --> <!-- --> <!-- --> <!-- --> </section><section id="package-exports" class="doc-section"><h2><a href="#package-exports">JavaScript package exports<span class="heading-anchor">#</span></a></h2><p>The complete declarations below are generated from every types entry in the JavaScript package exports. This includes NativeBridge event overloads, runtime helpers, Explorer types, and the development-only Vite plugin. Filter by export path, type, or member name.</p> <!-- --> <div class="reference-browser"><label class="filter-input"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><input placeholder="Filter exports, types, or member names…" aria-label="Filter JavaScript package exports" value=""/></label><details class="api-module"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite</span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>// Generated from ../../framework/shell_api/common.d.ts, ../../framework/shell_api/dialog.d.ts, ../../framework/shell_api/path.d.ts, ../../framework/shell_api/remoting.d.ts, ../../framework/shell_api/fs.d.ts, ../../framework/shell_api/storage.d.ts, ../../framework/shell_api/log.d.ts, ../../framework/shell_api/network.d.ts, ../../framework/shell_api/utility.d.ts, ../../framework/shell_api/window.d.ts. Do not edit.
+
+declare global {
+  interface Window {
+    readonly tuffite: typeof import(&#x27;./dialog&#x27;).tuffite &amp; typeof import(&#x27;./path&#x27;).tuffite &amp; typeof import(&#x27;./remoting&#x27;).tuffite &amp; typeof import(&#x27;./fs&#x27;).tuffite &amp; typeof import(&#x27;./storage&#x27;).tuffite &amp; typeof import(&#x27;./log&#x27;).tuffite &amp; typeof import(&#x27;./network&#x27;).tuffite &amp; typeof import(&#x27;./utility&#x27;).tuffite &amp; typeof import(&#x27;./window&#x27;).tuffite &amp; import(&#x27;../runtime&#x27;).NativeBridge;
+  }
+}
+
+export {};
+</code></pre><span class="sr-only" role="status"></span></div><a href="https://github.com/tuffite/tuffite/blob/main/packages/tuffite/generated/index.d.ts">View source<!-- --> <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></div></details><details class="api-module"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite/runtime</span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export type Codec = Readonly&lt;Record&lt;string, unknown&gt;&gt;;
+
+export type TuffiteErrorCode =
+  | &quot;invalid_argument&quot;
+  | &quot;incompatible_abi&quot;
+  | &quot;invalid_handle&quot;
+  | &quot;unavailable&quot;
+  | &quot;resource_exhausted&quot;
+  | &quot;internal&quot;
+  | &quot;transport_unavailable&quot;
+  | &quot;invalid_request&quot;
+  | &quot;unknown_command&quot;
+  | &quot;handler_failed&quot;
+  | &quot;decode_error&quot;
+  | &quot;protocol_mismatch&quot;
+  | &quot;schema_mismatch&quot;
+  | &quot;command_failed&quot;
+  | (string &amp; {});
+
+export class TuffiteError extends Error {
+  readonly code: TuffiteErrorCode;
+  readonly requestId?: bigint;
+  readonly cause?: unknown;
+  constructor(
+    code: TuffiteErrorCode,
+    message: string,
+    options?: Readonly&lt;{ requestId?: bigint; cause?: unknown }&gt;,
+  );
+}
+
+export interface ChannelEvent extends Event {
+  readonly detail: Readonly&lt;{ channel: string; data: Uint8Array }&gt;;
+}
+
+export interface ExplorerMessageEvent&lt;T = unknown&gt; extends Event {
+  readonly detail: Readonly&lt;{ data: T; from: string }&gt;;
+}
+
+export interface ExplorerOpenEvent extends Event {
+  readonly detail: Readonly&lt;{
+    url: string;
+    disposition: string;
+    userGesture: boolean;
+    from: string;
+  }&gt;;
+}
+
+export interface ExplorerDialogController {
+  readonly type: &quot;alert&quot; | &quot;confirm&quot; | &quot;prompt&quot; | &quot;beforeunload&quot;;
+  readonly message: string;
+  readonly defaultValue: string;
+  readonly isReload: boolean;
+  readonly from: string;
+  accept(promptText?: string): Promise&lt;boolean&gt;;
+  dismiss(): Promise&lt;boolean&gt;;
+}
+
+export interface ExplorerDialogEvent extends Event {
+  readonly detail: ExplorerDialogController;
+}
+
+export type ExplorerSurfaceRef = string &amp; {
+  readonly __tuffiteExplorerSurfaceRef: unique symbol;
+};
+export type ExplorerMessageTarget = &quot;parent&quot; | &quot;top&quot; | ExplorerSurfaceRef;
+
+export interface NativeBridge extends EventTarget {
+  invoke(channel: string, payload: Uint8Array): Promise&lt;Uint8Array&gt;;
+  postMessage(
+    data: unknown,
+    options?: Readonly&lt;{ to?: ExplorerMessageTarget }&gt;,
+  ): Promise&lt;boolean&gt;;
+  addEventListener(
+    type: &quot;channel&quot;,
+    listener: (event: ChannelEvent) =&gt; void,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  removeEventListener(
+    type: &quot;channel&quot;,
+    listener: (event: ChannelEvent) =&gt; void,
+    options?: boolean | EventListenerOptions,
+  ): void;
+  addEventListener(
+    type: &quot;message&quot;,
+    listener: (event: ExplorerMessageEvent) =&gt; void,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  removeEventListener(
+    type: &quot;message&quot;,
+    listener: (event: ExplorerMessageEvent) =&gt; void,
+    options?: boolean | EventListenerOptions,
+  ): void;
+  addEventListener(
+    type: &quot;open&quot; | &quot;popup&quot; | &quot;newwindow&quot; | &quot;navigation&quot;,
+    listener: (event: ExplorerOpenEvent) =&gt; void,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  removeEventListener(
+    type: &quot;open&quot; | &quot;popup&quot; | &quot;newwindow&quot; | &quot;navigation&quot;,
+    listener: (event: ExplorerOpenEvent) =&gt; void,
+    options?: boolean | EventListenerOptions,
+  ): void;
+  addEventListener(
+    type: &quot;dialog&quot;,
+    listener: (event: ExplorerDialogEvent) =&gt; void,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  removeEventListener(
+    type: &quot;dialog&quot;,
+    listener: (event: ExplorerDialogEvent) =&gt; void,
+    options?: boolean | EventListenerOptions,
+  ): void;
+}
+
+export type CommandEntry = readonly [
+  path: string,
+  id: string,
+  schemaFingerprint: string,
+  request: readonly Codec[],
+  response: Codec,
+];
+
+export type ConstantEntry = readonly [path: string, value: unknown];
+
+export function invokeBinary(
+  channel: string,
+  commandId: bigint,
+  schemaFingerprint: bigint,
+  payload?: Uint8Array,
+): Promise&lt;Uint8Array&gt;;
+
+export function createCommandApi(
+  entries: readonly (readonly [path: string, id: bigint])[],
+  typed?: boolean,
+  rootTarget?: object,
+  channelPrefix?: string,
+): object;
+
+export function createTypedCommandApi(
+  entries: readonly CommandEntry[],
+  constants?: readonly ConstantEntry[],
+  namespace?: string,
+): object;
+
+export type FrameworkEntry = readonly [
+  path: string,
+  request: readonly Codec[],
+  response: Codec,
+];
+
+export function createFrameworkApi(
+  entries: readonly FrameworkEntry[],
+  constants?: readonly ConstantEntry[],
+): object;
+</code></pre><span class="sr-only" role="status"></span></div><a href="https://github.com/tuffite/tuffite/blob/main/packages/tuffite/runtime.d.ts">View source<!-- --> <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></div></details><details class="api-module"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite/explorer</span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export type ExplorerNavigationPolicy = &quot;emit&quot; | &quot;allow&quot;;
+export type ExplorerDialogPolicy = &quot;emit&quot; | &quot;suppress&quot;;
+export type ExplorerJavaScriptWorld = &quot;isolated&quot; | &quot;main&quot;;
+export type ExplorerPartitionMode = &quot;shared&quot; | &quot;persist&quot; | &quot;memory&quot;;
+
+export interface ExplorerNavigationState {
+  readonly url: string;
+  readonly title: string;
+  readonly documentId: string;
+  readonly canGoBack: boolean;
+  readonly canGoForward: boolean;
+  readonly isLoading: boolean;
+  readonly rendererProcess: Readonly&lt;{
+    id: number;
+    ownerId: number;
+    isolated: boolean;
+  }&gt;;
+  readonly storagePartition: Readonly&lt;{
+    domain: string;
+    name: string;
+    inMemory: boolean;
+    isDefault: boolean;
+    mode: ExplorerPartitionMode;
+    shared: boolean;
+    inherited: boolean;
+    requested: string;
+    createdDomain: string;
+    createdName: string;
+    createdInMemory: boolean;
+    createdIsDefault: boolean;
+  }&gt;;
+}
+
+export interface ExplorerLoadErrorState extends ExplorerNavigationState {
+  readonly errorCode: number;
+  readonly errorDescription: string;
+}
+
+export interface ExplorerOpenDetail {
+  readonly url: string;
+  readonly disposition: string;
+  readonly userGesture: boolean;
+  readonly from: string;
+}
+
+export interface ExplorerDialogController {
+  readonly type: &quot;alert&quot; | &quot;confirm&quot; | &quot;prompt&quot; | &quot;beforeunload&quot;;
+  readonly message: string;
+  readonly defaultValue: string;
+  readonly isReload: boolean;
+  readonly from: string;
+  accept(promptText?: string): Promise&lt;boolean&gt;;
+  dismiss(): Promise&lt;boolean&gt;;
+}
+
+export type ExplorerTransferState = &quot;pending&quot; | &quot;attaching&quot; | &quot;transferred&quot; | &quot;closed&quot;;
+
+/** Pending resources are owned by the source document, independently of GC. */
+export interface ExplorerTransfer extends EventTarget {
+  readonly token: string;
+  readonly state: ExplorerTransferState;
+  close(): Promise&lt;void&gt;;
+  onstatechange: ((event: Event) =&gt; void) | null;
+}
+
+export interface ExplorerEventMap {
+  download: CustomEvent&lt;ExplorerDownload&gt;;
+  attached: Event;
+  detached: Event;
+  loadstart: CustomEvent&lt;ExplorerNavigationState&gt;;
+  loadstop: CustomEvent&lt;ExplorerNavigationState&gt;;
+  loadcommit: CustomEvent&lt;ExplorerNavigationState&gt;;
+  loaderror: CustomEvent&lt;ExplorerLoadErrorState&gt;;
+  open: CustomEvent&lt;ExplorerOpenDetail&gt;;
+  popup: CustomEvent&lt;ExplorerOpenDetail&gt;;
+  newwindow: CustomEvent&lt;ExplorerOpenDetail&gt;;
+  navigation: CustomEvent&lt;ExplorerOpenDetail&gt;;
+  dialog: CustomEvent&lt;ExplorerDialogController&gt;;
+  message: CustomEvent&lt;unknown&gt;;
+}
+
+export interface HTMLExplorerElement extends HTMLElement {
+  src: string;
+  /** Empty selects the parent&#x27;s partition; `shared` is not an element value. */
+  partition: string;
+  navigation: ExplorerNavigationPolicy;
+  dialogs: ExplorerDialogPolicy;
+  contextMenuEnabled: boolean;
+  deferred: boolean;
+  detach(): Promise&lt;ExplorerTransfer&gt;;
+  attach(token: string): Promise&lt;void&gt;;
+  ondetached: ((event: Event) =&gt; void) | null;
+  onattached: ((event: Event) =&gt; void) | null;
+  /** Starts navigation; completion is reported by load events. */
+  load(url: string): void;
+  download(url: string): Promise&lt;boolean&gt;;
+  getDownloads(): Promise&lt;ExplorerDownload[]&gt;;
+  cancelDownload(id: number): Promise&lt;boolean&gt;;
+  /** Base64 bytes of an owned completed download, bounded to 64 MiB. */
+  readDownload(id: number): Promise&lt;string&gt;;
+  /** A compositor PNG data URL, or an empty string when unavailable. */
+  capturePreview(): Promise&lt;string&gt;;
+  back(): Promise&lt;boolean&gt;;
+  forward(): Promise&lt;boolean&gt;;
+  go(offset: number): Promise&lt;boolean&gt;;
+  reload(options?: Readonly&lt;{ bypassCache?: boolean }&gt;): Promise&lt;boolean&gt;;
+  stop(): Promise&lt;boolean&gt;;
+  getNavigationState(): Promise&lt;ExplorerNavigationState&gt;;
+  /** The caller must validate the JSON-representable result at runtime. */
+  executeJavaScript(
+    source: string,
+    options?: Readonly&lt;{
+      world?: ExplorerJavaScriptWorld;
+      expectedDocumentId?: string;
+    }&gt;,
+  ): Promise&lt;unknown&gt;;
+  postMessage(data: unknown): Promise&lt;boolean&gt;;
+  addEventListener&lt;K extends keyof ExplorerEventMap&gt;(
+    type: K,
+    listener: (this: HTMLExplorerElement, event: ExplorerEventMap[K]) =&gt; void,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  removeEventListener&lt;K extends keyof ExplorerEventMap&gt;(
+    type: K,
+    listener: (this: HTMLExplorerElement, event: ExplorerEventMap[K]) =&gt; void,
+    options?: boolean | EventListenerOptions,
+  ): void;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    explorer: HTMLExplorerElement;
+  }
+}
+
+export type ExplorerDownload = {
+  id: number;
+  url: string;
+  filename: string;
+  path: string;
+  mimeType: string;
+  state: &quot;in-progress&quot; | &quot;complete&quot; | &quot;cancelled&quot; | &quot;interrupted&quot;;
+  receivedBytes: number;
+  totalBytes: number;
+  error: number;
+  navigation: boolean;
+};
+</code></pre><span class="sr-only" role="status"></span></div><a href="https://github.com/tuffite/tuffite/blob/main/packages/tuffite/explorer.d.ts">View source<!-- --> <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></div></details><details class="api-module"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite/vite</span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export interface TuffiteViteOptions {
+  manifest?: string;
+  root?: string;
+  static?: Readonly&lt;Record&lt;string, string&gt;&gt;;
+  shellApi?: false | Readonly&lt;{ url: string; file: string }&gt;;
+}
+
+export function tuffite(options?: TuffiteViteOptions): import(&quot;vite&quot;).Plugin;
+export function findManifest(start: string): string | undefined;
+export function contentTypeForPath(path: string): string | undefined;
+export function decodeRequestPath(requestUrl: string | undefined): string | undefined;
+export function resolveConfinedFile(root: string, path: string): Promise&lt;string | undefined&gt;;
+</code></pre><span class="sr-only" role="status"></span></div><a href="https://github.com/tuffite/tuffite/blob/main/packages/tuffite/vite.d.ts">View source<!-- --> <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></div></details></div> <!-- --> <!-- --> </section><section id="modules" class="doc-section"><h2><a href="#modules">Framework modules<span class="heading-anchor">#</span></a></h2><p>Expand a module to inspect its complete source declaration, including argument and return models.</p> <!-- --> <!-- --> <div class="reference-browser"><label class="filter-input"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg><input placeholder="Filter modules or method names…" aria-label="Filter JavaScript API" value=""/></label><details class="api-module" id="module-common"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->common</span><small>0<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>/** Filesystem roots accepted by path and fs APIs. */
+export enum BaseDirectory {
+  Resource = &quot;resource&quot;,
+  Data = &quot;data&quot;,
+  Cache = &quot;cache&quot;,
+  Temp = &quot;temp&quot;,
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-dialog"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->dialog</span><small>2<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>openFile(options?: OpenFileDialogOptions): Promise&lt;string | undefined&gt;;</code></div><div class="method"><code>openDirectory(options?: OpenDirectoryDialogOptions): Promise&lt;string | undefined&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export interface OpenFileDialogOptions {
+  readonly title?: string;
+  readonly defaultPath?: string;
+  /** Extension groups without leading dots, for example [[&quot;html&quot;, &quot;htm&quot;], [&quot;md&quot;]]. */
+  readonly extensions?: string[][];
+}
+
+export interface OpenDirectoryDialogOptions {
+  readonly title?: string;
+}
+
+export declare namespace tuffite {
+  export namespace dialog {
+    export function openFile(options?: OpenFileDialogOptions): Promise&lt;string | undefined&gt;;
+    export function openDirectory(options?: OpenDirectoryDialogOptions): Promise&lt;string | undefined&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-fs"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->fs</span><small>5<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>readFile(base: BaseDirectory, path: string): Promise&lt;Uint8Array&gt;;</code></div><div class="method"><code>writeFile(
+      base: BaseDirectory,
+      path: string,
+      contents: Uint8Array,
+    ): Promise&lt;void&gt;;</code></div><div class="method"><code>exists(base: BaseDirectory, path: string): Promise&lt;boolean&gt;;</code></div><div class="method"><code>createDir(base: BaseDirectory, path: string): Promise&lt;void&gt;;</code></div><div class="method"><code>removeFile(base: BaseDirectory, path: string): Promise&lt;void&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export declare namespace tuffite {
+  export namespace fs {
+    export function readFile(base: BaseDirectory, path: string): Promise&lt;Uint8Array&gt;;
+    export function writeFile(
+      base: BaseDirectory,
+      path: string,
+      contents: Uint8Array,
+    ): Promise&lt;void&gt;;
+    export function exists(base: BaseDirectory, path: string): Promise&lt;boolean&gt;;
+    export function createDir(base: BaseDirectory, path: string): Promise&lt;void&gt;;
+    export function removeFile(base: BaseDirectory, path: string): Promise&lt;void&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-log"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->log</span><small>5<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>trace(message: string): Promise&lt;void&gt;;</code></div><div class="method"><code>debug(message: string): Promise&lt;void&gt;;</code></div><div class="method"><code>info(message: string): Promise&lt;void&gt;;</code></div><div class="method"><code>warn(message: string): Promise&lt;void&gt;;</code></div><div class="method"><code>error(message: string): Promise&lt;void&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export declare namespace tuffite {
+  export namespace log {
+    export function trace(message: string): Promise&lt;void&gt;;
+    export function debug(message: string): Promise&lt;void&gt;;
+    export function info(message: string): Promise&lt;void&gt;;
+    export function warn(message: string): Promise&lt;void&gt;;
+    export function error(message: string): Promise&lt;void&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-network"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->network</span><small>1<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>request(url: string): Promise&lt;NetworkResponse&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export interface NetworkResponse {
+  readonly status: number;
+  readonly body: Uint8Array;
+}
+
+export declare namespace tuffite {
+  export namespace net {
+    export function request(url: string): Promise&lt;NetworkResponse&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-path"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->path</span><small>2<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>directories(): Promise&lt;PathDirectories&gt;;</code></div><div class="method"><code>resolve(base: BaseDirectory, relative?: string): Promise&lt;string&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export interface PathDirectories {
+  readonly resource: string;
+  readonly data: string;
+  readonly cache: string;
+  readonly temp: string;
+}
+
+export declare namespace tuffite {
+  export namespace path {
+    export function directories(): Promise&lt;PathDirectories&gt;;
+    export function resolve(base: BaseDirectory, relative?: string): Promise&lt;string&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-remoting"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->remoting</span><small>9<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>capabilities(): Promise&lt;RemotingCapabilities&gt;;</code></div><div class="method"><code>start(options: RemotingStartOptions): Promise&lt;RemotingSession&gt;;</code></div><div class="method"><code>processSignal(id: bigint, signal: RemotingSignal): Promise&lt;void&gt;;</code></div><div class="method"><code>takeSignals(id: bigint, afterSequence?: bigint): Promise&lt;RemotingSignal[]&gt;;</code></div><div class="method"><code>sendInput(id: bigint, event: RemotingInputEvent): Promise&lt;void&gt;;</code></div><div class="method"><code>stop(id: bigint): Promise&lt;void&gt;;</code></div><div class="method"><code>stats(id: bigint): Promise&lt;RemotingStats&gt;;</code></div><div class="method"><code>capture(screenId?: bigint): Promise&lt;RemotingSnapshot&gt;;</code></div><div class="method"><code>injectInput(event: RemotingInputEvent): Promise&lt;void&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export interface RemotingCapabilities {
+  readonly available: boolean;
+  readonly protocol: string;
+  readonly videoCodecs: string[];
+  readonly input: boolean;
+  readonly clipboard: boolean;
+  readonly reconnect: boolean;
+  readonly snapshot: boolean;
+}
+
+export interface RemotingIceServer {
+  readonly urls: string[];
+  readonly username?: string;
+  readonly credential?: string;
+}
+
+export interface RemotingStartOptions {
+  /** Per-session secret supplied by the application&#x27;s authenticated control plane. */
+  readonly authKey: string;
+  readonly iceServers: RemotingIceServer[];
+  readonly maxBitrateKbps?: number;
+  readonly targetFramerate?: number;
+  readonly screenId?: bigint;
+}
+
+export interface RemotingSession {
+  readonly id: bigint;
+  readonly state: string;
+}
+
+export interface RemotingSessionDescription {
+  readonly type: string;
+  readonly sdp: string;
+}
+
+export interface RemotingIceCandidate {
+  readonly mid: string;
+  readonly mLineIndex: number;
+  readonly candidate: string;
+}
+
+export interface RemotingSignal {
+  readonly sequence: bigint;
+  readonly description?: RemotingSessionDescription;
+  readonly candidates: RemotingIceCandidate[];
+}
+
+export interface RemotingInputEvent {
+  readonly kind: string;
+  readonly pressed?: boolean;
+  readonly usbKeycode?: number;
+  readonly text?: string;
+  readonly x?: number;
+  readonly y?: number;
+  readonly button?: string;
+  readonly buttonDown?: boolean;
+  readonly wheelDeltaX?: number;
+  readonly wheelDeltaY?: number;
+  readonly wheelTicksX?: number;
+  readonly wheelTicksY?: number;
+  readonly clipboardMimeType?: string;
+  readonly clipboardData?: Uint8Array;
+}
+
+export interface RemotingStats {
+  readonly state: string;
+  readonly route: string;
+  readonly transport: string;
+  readonly latencyMs: number;
+  readonly jitterMs: number;
+  readonly availableBandwidthKbps: number;
+  readonly packetLossPercent: number;
+}
+
+export interface RemotingSnapshot {
+  readonly width: number;
+  readonly height: number;
+  readonly mimeType: string;
+  readonly data: Uint8Array;
+}
+
+export declare namespace tuffite {
+  export namespace remoting {
+    export function capabilities(): Promise&lt;RemotingCapabilities&gt;;
+    export function start(options: RemotingStartOptions): Promise&lt;RemotingSession&gt;;
+    export function processSignal(id: bigint, signal: RemotingSignal): Promise&lt;void&gt;;
+    export function takeSignals(id: bigint, afterSequence?: bigint): Promise&lt;RemotingSignal[]&gt;;
+    export function sendInput(id: bigint, event: RemotingInputEvent): Promise&lt;void&gt;;
+    export function stop(id: bigint): Promise&lt;void&gt;;
+    export function stats(id: bigint): Promise&lt;RemotingStats&gt;;
+    export function capture(screenId?: bigint): Promise&lt;RemotingSnapshot&gt;;
+    /** Native application callers only; renderer calls are denied by routing policy. */
+    export function injectInput(event: RemotingInputEvent): Promise&lt;void&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-storage"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->storage</span><small>4<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>get(key: string): Promise&lt;Uint8Array | undefined&gt;;</code></div><div class="method"><code>set(key: string, value: Uint8Array): Promise&lt;void&gt;;</code></div><div class="method"><code>remove(key: string): Promise&lt;void&gt;;</code></div><div class="method"><code>clear(): Promise&lt;void&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export declare namespace tuffite {
+  export namespace storage {
+    export function get(key: string): Promise&lt;Uint8Array | undefined&gt;;
+    export function set(key: string, value: Uint8Array): Promise&lt;void&gt;;
+    export function remove(key: string): Promise&lt;void&gt;;
+    export function clear(): Promise&lt;void&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-utility"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->utility</span><small>2<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>invoke(
+      name: string,
+      requestId: bigint,
+      payload?: Uint8Array,
+    ): Promise&lt;Uint8Array&gt;;</code></div><div class="method"><code>cancel(name: string, requestId: bigint): Promise&lt;void&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>export declare namespace tuffite {
+  export namespace utility {
+    export function invoke(
+      name: string,
+      requestId: bigint,
+      payload?: Uint8Array,
+    ): Promise&lt;Uint8Array&gt;;
+    export function cancel(name: string, requestId: bigint): Promise&lt;void&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details><details class="api-module" id="module-window"><summary><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml lucide-code-2" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg><span>tuffite.<!-- -->window</span><small>12<!-- --> <!-- -->methods</small><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="api-module-body"><div class="method"><code>current(): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>list(): Promise&lt;WindowInfo[]&gt;;</code></div><div class="method"><code>create(options?: WindowOptions): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>focus(id?: WindowId): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>minimize(id?: WindowId): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>maximize(id?: WindowId): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>restore(id?: WindowId): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>setFullscreen(fullscreen: boolean, id?: WindowId): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>close(id?: WindowId): Promise&lt;void&gt;;</code></div><div class="method"><code>setTitle(title: string, id?: WindowId): Promise&lt;WindowInfo&gt;;</code></div><div class="method"><code>getBounds(id?: WindowId): Promise&lt;WindowBounds&gt;;</code></div><div class="method"><code>setBounds(bounds: WindowBounds, id?: WindowId): Promise&lt;WindowInfo&gt;;</code></div><div class="code-block"><div class="code-heading"><span>typescript</span><button aria-label="Copy code"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Copy code</span></button></div><pre><code>/** Opaque browser-process identifier. It is intentionally not a native handle. */
+export type WindowId = bigint;
+
+export interface WindowBounds {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+export interface WindowInfo {
+  readonly id: WindowId;
+  readonly label: string;
+  readonly title: string;
+  readonly url: string;
+  readonly bounds: WindowBounds;
+  readonly focused: boolean;
+  readonly minimized: boolean;
+  readonly maximized: boolean;
+  readonly fullscreen: boolean;
+}
+
+export interface WindowOptions {
+  readonly label?: string;
+  readonly url?: string;
+  readonly title?: string;
+  readonly bounds?: WindowBounds;
+  readonly focused?: boolean;
+}
+
+export declare namespace tuffite {
+  export namespace window {
+    export function current(): Promise&lt;WindowInfo&gt;;
+    export function list(): Promise&lt;WindowInfo[]&gt;;
+    export function create(options?: WindowOptions): Promise&lt;WindowInfo&gt;;
+    export function focus(id?: WindowId): Promise&lt;WindowInfo&gt;;
+    export function minimize(id?: WindowId): Promise&lt;WindowInfo&gt;;
+    export function maximize(id?: WindowId): Promise&lt;WindowInfo&gt;;
+    export function restore(id?: WindowId): Promise&lt;WindowInfo&gt;;
+    export function setFullscreen(fullscreen: boolean, id?: WindowId): Promise&lt;WindowInfo&gt;;
+    export function close(id?: WindowId): Promise&lt;void&gt;;
+    export function setTitle(title: string, id?: WindowId): Promise&lt;WindowInfo&gt;;
+    export function getBounds(id?: WindowId): Promise&lt;WindowBounds&gt;;
+    export function setBounds(bounds: WindowBounds, id?: WindowId): Promise&lt;WindowInfo&gt;;
+  }
+}
+</code></pre><span class="sr-only" role="status"></span></div></div></details></div> <!-- --> </section></article><div class="article-meta"><span>Tuffite documentation · English &amp; 简体中文</span><a href="https://github.com/tuffite/www/edit/main/src/content.ts" target="_blank" rel="noreferrer">Edit this page<!-- --> <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></div><div class="pagination"><a href="/en/references/rust/" class="pagination-card"><span><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>Previous page</span><strong>Rust API</strong></a><a href="/en/references/configuration/" class="pagination-card next"><span>Next page<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span><strong>tuffite.json</strong></a></div><footer class="main-footer"><span>© <!-- -->2026<!-- --> Tuffite <!-- -->contributors</span><span>Rust · Chromium · Web</span></footer></main><aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><a class="toc-first" href="#usage">Use the generated native facade</a><a class="" href="#bridge">The window.tuffite bridge</a><a class="" href="#listeners">Subscribe and unsubscribe to events</a><a class="" href="#messages">Send Explorer messages</a><a class="" href="#invoke">Low-level binary invocation</a><a class="" href="#runtime">Runtime helpers and errors</a><a class="" href="#package-exports">JavaScript package exports</a><a class="" href="#modules">Framework modules</a><div class="toc-extra"><span>Something to build?</span><a href="/en/guides/quick-start/">Start with Tuffite<!-- --> <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></div></aside></div></div></body></html>

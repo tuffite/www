@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-10-10T14:53:59.291Z",
+  "website": {
+    "repository": "https://github.com/tuffite/www",
+    "commit": "ae0078d44dbbed1bba80f5f6cdc539a45a4fee90",
+    "dirty": true
+  },
+  "framework": {
+    "repository": "https://github.com/tuffite/tuffite",
+    "commit": "8518fe8ebe7ef013f471956ddbc00c94dfe3ab26",
+    "dirty": false
+  }
+}

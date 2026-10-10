@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Close","Create","Current","Focus","GetBounds","List","Maximize","Minimize","Restore","SetBounds","SetFullscreen","SetTitle"]};
