@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["framework","shell_api"],"struct":["BuildOutput","Builder"]};
+window.SIDEBAR_ITEMS = {"enum":["Step"],"mod":["framework","shell_api"],"struct":["BuildOutput","Builder"]};

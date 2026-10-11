@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Facade","OutputMode"],"struct":["Codegen","GeneratedBindings"]};
+window.SIDEBAR_ITEMS = {"enum":["Facade","OutputMode"],"struct":["GeneratedBindings","Generator"]};

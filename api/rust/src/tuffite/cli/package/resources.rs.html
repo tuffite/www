@@ -67,106 +67,108 @@
 <a href=#67 id=67 data-nosnippet>67</a>        fs::canonicalize(project_dir).map_err(io_error(<span class="string">"resolve project directory"</span>))<span class="question-mark">?</span>;
 <a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">for </span>resource <span class="kw">in </span>resources {
 <a href=#69 id=69 data-nosnippet>69</a>        <span class="kw">let </span>relative = safe_relative_path(resource, <span class="string">"bundle.resources entry"</span>)<span class="question-mark">?</span>;
-<a href=#70 id=70 data-nosnippet>70</a>        <span class="kw">if </span>relative == Path::new(RENDERER_RUNTIME_FILE)
-<a href=#71 id=71 data-nosnippet>71</a>            || relative == Path::new(FRAMEWORK_SHELL_API_FILE)
-<a href=#72 id=72 data-nosnippet>72</a>        {
-<a href=#73 id=73 data-nosnippet>73</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(
-<a href=#74 id=74 data-nosnippet>74</a>                <span class="string">"bundle.resources entry is reserved by Tuffite: {resource}"
-<a href=#75 id=75 data-nosnippet>75</a>            </span>));
-<a href=#76 id=76 data-nosnippet>76</a>        }
-<a href=#77 id=77 data-nosnippet>77</a>        <span class="kw">let </span>unresolved = project_dir.join(<span class="kw-2">&amp;</span>relative);
-<a href=#78 id=78 data-nosnippet>78</a>        reject_path_symlinks(<span class="kw-2">&amp;</span>project_dir, <span class="kw-2">&amp;</span>relative)<span class="question-mark">?</span>;
-<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span>source = fs::canonicalize(<span class="kw-2">&amp;</span>unresolved)
-<a href=#80 id=80 data-nosnippet>80</a>            .map_err(|error| <span class="macro">format!</span>(<span class="string">"resolve resource {}: {error}"</span>, unresolved.display()))<span class="question-mark">?</span>;
-<a href=#81 id=81 data-nosnippet>81</a>        <span class="kw">if </span>!source.starts_with(<span class="kw-2">&amp;</span>project_dir) {
-<a href=#82 id=82 data-nosnippet>82</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"resource escaped project directory: {resource}"</span>));
-<a href=#83 id=83 data-nosnippet>83</a>        }
-<a href=#84 id=84 data-nosnippet>84</a>        <span class="kw">let </span>target = package_dir.join(asset_root).join(<span class="kw-2">&amp;</span>relative);
-<a href=#85 id=85 data-nosnippet>85</a>        <span class="kw">if </span>source.is_file() {
-<a href=#86 id=86 data-nosnippet>86</a>            copy_regular_file(<span class="kw-2">&amp;</span>source, <span class="kw-2">&amp;</span>target)<span class="question-mark">?</span>;
-<a href=#87 id=87 data-nosnippet>87</a>        } <span class="kw">else if </span>source.is_dir() {
-<a href=#88 id=88 data-nosnippet>88</a>            copy_directory(<span class="kw-2">&amp;</span>source, <span class="kw-2">&amp;</span>target)<span class="question-mark">?</span>;
-<a href=#89 id=89 data-nosnippet>89</a>        } <span class="kw">else </span>{
-<a href=#90 id=90 data-nosnippet>90</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(
-<a href=#91 id=91 data-nosnippet>91</a>                <span class="string">"bundle resource is neither a regular file nor a directory: {resource}"
-<a href=#92 id=92 data-nosnippet>92</a>            </span>));
-<a href=#93 id=93 data-nosnippet>93</a>        }
-<a href=#94 id=94 data-nosnippet>94</a>    }
-<a href=#95 id=95 data-nosnippet>95</a>    <span class="prelude-val">Ok</span>(())
-<a href=#96 id=96 data-nosnippet>96</a>}
-<a href=#97 id=97 data-nosnippet>97</a>
-<a href=#98 id=98 data-nosnippet>98</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>reject_path_symlinks(root: <span class="kw-2">&amp;</span>Path, relative: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
-<a href=#99 id=99 data-nosnippet>99</a>    <span class="kw">let </span><span class="kw-2">mut </span>current = root.to_path_buf();
-<a href=#100 id=100 data-nosnippet>100</a>    <span class="kw">for </span>component <span class="kw">in </span>relative.components() {
-<a href=#101 id=101 data-nosnippet>101</a>        <span class="kw">let </span>Component::Normal(part) = component <span class="kw">else </span>{
-<a href=#102 id=102 data-nosnippet>102</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"unsafe relative path: {}"</span>, relative.display()));
-<a href=#103 id=103 data-nosnippet>103</a>        };
-<a href=#104 id=104 data-nosnippet>104</a>        current.push(part);
-<a href=#105 id=105 data-nosnippet>105</a>        reject_symlink(<span class="kw-2">&amp;</span>current)<span class="question-mark">?</span>;
-<a href=#106 id=106 data-nosnippet>106</a>    }
-<a href=#107 id=107 data-nosnippet>107</a>    <span class="prelude-val">Ok</span>(())
-<a href=#108 id=108 data-nosnippet>108</a>}
-<a href=#109 id=109 data-nosnippet>109</a>
-<a href=#110 id=110 data-nosnippet>110</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>copy_regular_file(source: <span class="kw-2">&amp;</span>Path, target: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
-<a href=#111 id=111 data-nosnippet>111</a>    reject_symlink(source)<span class="question-mark">?</span>;
-<a href=#112 id=112 data-nosnippet>112</a>    <span class="kw">if </span>!source.is_file() {
-<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"expected a regular file: {}"</span>, source.display()));
-<a href=#114 id=114 data-nosnippet>114</a>    }
-<a href=#115 id=115 data-nosnippet>115</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(parent) = target.parent() {
-<a href=#116 id=116 data-nosnippet>116</a>        fs::create_dir_all(parent).map_err(|error| {
-<a href=#117 id=117 data-nosnippet>117</a>            <span class="macro">format!</span>(
-<a href=#118 id=118 data-nosnippet>118</a>                <span class="string">"create package subdirectory {} for {}: {error}"</span>,
-<a href=#119 id=119 data-nosnippet>119</a>                parent.display(),
-<a href=#120 id=120 data-nosnippet>120</a>                target.display()
-<a href=#121 id=121 data-nosnippet>121</a>            )
-<a href=#122 id=122 data-nosnippet>122</a>        })<span class="question-mark">?</span>;
-<a href=#123 id=123 data-nosnippet>123</a>    }
-<a href=#124 id=124 data-nosnippet>124</a>    fs::copy(source, target)
-<a href=#125 id=125 data-nosnippet>125</a>        .map(|<span class="kw">_</span>| ())
-<a href=#126 id=126 data-nosnippet>126</a>        .map_err(|error| <span class="macro">format!</span>(<span class="string">"copy {} to {}: {error}"</span>, source.display(), target.display()))
-<a href=#127 id=127 data-nosnippet>127</a>}
-<a href=#128 id=128 data-nosnippet>128</a>
-<a href=#129 id=129 data-nosnippet>129</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>copy_directory(source: <span class="kw-2">&amp;</span>Path, target: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
-<a href=#130 id=130 data-nosnippet>130</a>    <span class="kw">let </span>relative_files = collect_files(source)<span class="question-mark">?</span>;
-<a href=#131 id=131 data-nosnippet>131</a>    <span class="kw">for </span>relative <span class="kw">in </span>relative_files {
-<a href=#132 id=132 data-nosnippet>132</a>        copy_regular_file(<span class="kw-2">&amp;</span>source.join(<span class="kw-2">&amp;</span>relative), <span class="kw-2">&amp;</span>target.join(relative))<span class="question-mark">?</span>;
-<a href=#133 id=133 data-nosnippet>133</a>    }
-<a href=#134 id=134 data-nosnippet>134</a>    <span class="prelude-val">Ok</span>(())
-<a href=#135 id=135 data-nosnippet>135</a>}
-<a href=#136 id=136 data-nosnippet>136</a>
-<a href=#137 id=137 data-nosnippet>137</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>validate_internal_asset_root(
-<a href=#138 id=138 data-nosnippet>138</a>    asset_root: <span class="kw-2">&amp;</span>Path,
-<a href=#139 id=139 data-nosnippet>139</a>    executable_name: <span class="kw-2">&amp;</span>str,
-<a href=#140 id=140 data-nosnippet>140</a>    runtime_library: <span class="kw-2">&amp;</span>str,
-<a href=#141 id=141 data-nosnippet>141</a>) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
-<a href=#142 id=142 data-nosnippet>142</a>    <span class="kw">let </span>root = asset_root
-<a href=#143 id=143 data-nosnippet>143</a>        .components()
-<a href=#144 id=144 data-nosnippet>144</a>        .next()
-<a href=#145 id=145 data-nosnippet>145</a>        .and_then(|component| <span class="kw">match </span>component {
-<a href=#146 id=146 data-nosnippet>146</a>            Component::Normal(part) =&gt; part.to_str(),
-<a href=#147 id=147 data-nosnippet>147</a>            <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
-<a href=#148 id=148 data-nosnippet>148</a>        })
-<a href=#149 id=149 data-nosnippet>149</a>        .ok_or_else(|| {
-<a href=#150 id=150 data-nosnippet>150</a>            <span class="string">"internal asset root must start with a valid UTF-8 directory name"</span>.to_owned()
-<a href=#151 id=151 data-nosnippet>151</a>        })<span class="question-mark">?</span>;
-<a href=#152 id=152 data-nosnippet>152</a>    <span class="kw">let </span>launcher = <span class="kw">if </span><span class="macro">cfg!</span>(target_os = <span class="string">"windows"</span>) {
-<a href=#153 id=153 data-nosnippet>153</a>        <span class="string">"run-tuffite.cmd"
-<a href=#154 id=154 data-nosnippet>154</a>    </span>} <span class="kw">else </span>{
-<a href=#155 id=155 data-nosnippet>155</a>        <span class="string">"run-tuffite.sh"
-<a href=#156 id=156 data-nosnippet>156</a>    </span>};
-<a href=#157 id=157 data-nosnippet>157</a>    <span class="kw">for </span>reserved <span class="kw">in </span>[
-<a href=#158 id=158 data-nosnippet>158</a>        executable_name,
-<a href=#159 id=159 data-nosnippet>159</a>        runtime_library,
-<a href=#160 id=160 data-nosnippet>160</a>        <span class="string">"tuffite.json"</span>,
-<a href=#161 id=161 data-nosnippet>161</a>        MANIFEST_FILE,
-<a href=#162 id=162 data-nosnippet>162</a>        <span class="string">"README.txt"</span>,
-<a href=#163 id=163 data-nosnippet>163</a>        launcher,
-<a href=#164 id=164 data-nosnippet>164</a>    ] {
-<a href=#165 id=165 data-nosnippet>165</a>        <span class="kw">if </span>root == reserved {
-<a href=#166 id=166 data-nosnippet>166</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(
-<a href=#167 id=167 data-nosnippet>167</a>                <span class="string">"internal asset root top-level directory `{root}` conflicts with package-root file `{reserved}`"
-<a href=#168 id=168 data-nosnippet>168</a>            </span>));
-<a href=#169 id=169 data-nosnippet>169</a>        }
-<a href=#170 id=170 data-nosnippet>170</a>    }
-<a href=#171 id=171 data-nosnippet>171</a>    <span class="prelude-val">Ok</span>(())
-<a href=#172 id=172 data-nosnippet>172</a>}</code></pre></div></section></main></body></html>
+<a href=#70 id=70 data-nosnippet>70</a>        <span class="kw">if </span>relative == Path::new(<span class="string">"app.icns"</span>)
+<a href=#71 id=71 data-nosnippet>71</a>            || relative == Path::new(<span class="string">"app.ico"</span>)
+<a href=#72 id=72 data-nosnippet>72</a>            || relative == Path::new(RENDERER_RUNTIME_FILE)
+<a href=#73 id=73 data-nosnippet>73</a>            || relative == Path::new(FRAMEWORK_SHELL_API_FILE)
+<a href=#74 id=74 data-nosnippet>74</a>        {
+<a href=#75 id=75 data-nosnippet>75</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(
+<a href=#76 id=76 data-nosnippet>76</a>                <span class="string">"bundle.resources entry is reserved by Tuffite: {resource}"
+<a href=#77 id=77 data-nosnippet>77</a>            </span>));
+<a href=#78 id=78 data-nosnippet>78</a>        }
+<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span>unresolved = project_dir.join(<span class="kw-2">&amp;</span>relative);
+<a href=#80 id=80 data-nosnippet>80</a>        reject_path_symlinks(<span class="kw-2">&amp;</span>project_dir, <span class="kw-2">&amp;</span>relative)<span class="question-mark">?</span>;
+<a href=#81 id=81 data-nosnippet>81</a>        <span class="kw">let </span>source = fs::canonicalize(<span class="kw-2">&amp;</span>unresolved)
+<a href=#82 id=82 data-nosnippet>82</a>            .map_err(|error| <span class="macro">format!</span>(<span class="string">"resolve resource {}: {error}"</span>, unresolved.display()))<span class="question-mark">?</span>;
+<a href=#83 id=83 data-nosnippet>83</a>        <span class="kw">if </span>!source.starts_with(<span class="kw-2">&amp;</span>project_dir) {
+<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"resource escaped project directory: {resource}"</span>));
+<a href=#85 id=85 data-nosnippet>85</a>        }
+<a href=#86 id=86 data-nosnippet>86</a>        <span class="kw">let </span>target = package_dir.join(asset_root).join(<span class="kw-2">&amp;</span>relative);
+<a href=#87 id=87 data-nosnippet>87</a>        <span class="kw">if </span>source.is_file() {
+<a href=#88 id=88 data-nosnippet>88</a>            copy_regular_file(<span class="kw-2">&amp;</span>source, <span class="kw-2">&amp;</span>target)<span class="question-mark">?</span>;
+<a href=#89 id=89 data-nosnippet>89</a>        } <span class="kw">else if </span>source.is_dir() {
+<a href=#90 id=90 data-nosnippet>90</a>            copy_directory(<span class="kw-2">&amp;</span>source, <span class="kw-2">&amp;</span>target)<span class="question-mark">?</span>;
+<a href=#91 id=91 data-nosnippet>91</a>        } <span class="kw">else </span>{
+<a href=#92 id=92 data-nosnippet>92</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(
+<a href=#93 id=93 data-nosnippet>93</a>                <span class="string">"bundle resource is neither a regular file nor a directory: {resource}"
+<a href=#94 id=94 data-nosnippet>94</a>            </span>));
+<a href=#95 id=95 data-nosnippet>95</a>        }
+<a href=#96 id=96 data-nosnippet>96</a>    }
+<a href=#97 id=97 data-nosnippet>97</a>    <span class="prelude-val">Ok</span>(())
+<a href=#98 id=98 data-nosnippet>98</a>}
+<a href=#99 id=99 data-nosnippet>99</a>
+<a href=#100 id=100 data-nosnippet>100</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>reject_path_symlinks(root: <span class="kw-2">&amp;</span>Path, relative: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
+<a href=#101 id=101 data-nosnippet>101</a>    <span class="kw">let </span><span class="kw-2">mut </span>current = root.to_path_buf();
+<a href=#102 id=102 data-nosnippet>102</a>    <span class="kw">for </span>component <span class="kw">in </span>relative.components() {
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">let </span>Component::Normal(part) = component <span class="kw">else </span>{
+<a href=#104 id=104 data-nosnippet>104</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"unsafe relative path: {}"</span>, relative.display()));
+<a href=#105 id=105 data-nosnippet>105</a>        };
+<a href=#106 id=106 data-nosnippet>106</a>        current.push(part);
+<a href=#107 id=107 data-nosnippet>107</a>        reject_symlink(<span class="kw-2">&amp;</span>current)<span class="question-mark">?</span>;
+<a href=#108 id=108 data-nosnippet>108</a>    }
+<a href=#109 id=109 data-nosnippet>109</a>    <span class="prelude-val">Ok</span>(())
+<a href=#110 id=110 data-nosnippet>110</a>}
+<a href=#111 id=111 data-nosnippet>111</a>
+<a href=#112 id=112 data-nosnippet>112</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>copy_regular_file(source: <span class="kw-2">&amp;</span>Path, target: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
+<a href=#113 id=113 data-nosnippet>113</a>    reject_symlink(source)<span class="question-mark">?</span>;
+<a href=#114 id=114 data-nosnippet>114</a>    <span class="kw">if </span>!source.is_file() {
+<a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"expected a regular file: {}"</span>, source.display()));
+<a href=#116 id=116 data-nosnippet>116</a>    }
+<a href=#117 id=117 data-nosnippet>117</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(parent) = target.parent() {
+<a href=#118 id=118 data-nosnippet>118</a>        fs::create_dir_all(parent).map_err(|error| {
+<a href=#119 id=119 data-nosnippet>119</a>            <span class="macro">format!</span>(
+<a href=#120 id=120 data-nosnippet>120</a>                <span class="string">"create package subdirectory {} for {}: {error}"</span>,
+<a href=#121 id=121 data-nosnippet>121</a>                parent.display(),
+<a href=#122 id=122 data-nosnippet>122</a>                target.display()
+<a href=#123 id=123 data-nosnippet>123</a>            )
+<a href=#124 id=124 data-nosnippet>124</a>        })<span class="question-mark">?</span>;
+<a href=#125 id=125 data-nosnippet>125</a>    }
+<a href=#126 id=126 data-nosnippet>126</a>    fs::copy(source, target)
+<a href=#127 id=127 data-nosnippet>127</a>        .map(|<span class="kw">_</span>| ())
+<a href=#128 id=128 data-nosnippet>128</a>        .map_err(|error| <span class="macro">format!</span>(<span class="string">"copy {} to {}: {error}"</span>, source.display(), target.display()))
+<a href=#129 id=129 data-nosnippet>129</a>}
+<a href=#130 id=130 data-nosnippet>130</a>
+<a href=#131 id=131 data-nosnippet>131</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>copy_directory(source: <span class="kw-2">&amp;</span>Path, target: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
+<a href=#132 id=132 data-nosnippet>132</a>    <span class="kw">let </span>relative_files = collect_files(source)<span class="question-mark">?</span>;
+<a href=#133 id=133 data-nosnippet>133</a>    <span class="kw">for </span>relative <span class="kw">in </span>relative_files {
+<a href=#134 id=134 data-nosnippet>134</a>        copy_regular_file(<span class="kw-2">&amp;</span>source.join(<span class="kw-2">&amp;</span>relative), <span class="kw-2">&amp;</span>target.join(relative))<span class="question-mark">?</span>;
+<a href=#135 id=135 data-nosnippet>135</a>    }
+<a href=#136 id=136 data-nosnippet>136</a>    <span class="prelude-val">Ok</span>(())
+<a href=#137 id=137 data-nosnippet>137</a>}
+<a href=#138 id=138 data-nosnippet>138</a>
+<a href=#139 id=139 data-nosnippet>139</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>validate_internal_asset_root(
+<a href=#140 id=140 data-nosnippet>140</a>    asset_root: <span class="kw-2">&amp;</span>Path,
+<a href=#141 id=141 data-nosnippet>141</a>    executable_name: <span class="kw-2">&amp;</span>str,
+<a href=#142 id=142 data-nosnippet>142</a>    runtime_library: <span class="kw-2">&amp;</span>str,
+<a href=#143 id=143 data-nosnippet>143</a>) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
+<a href=#144 id=144 data-nosnippet>144</a>    <span class="kw">let </span>root = asset_root
+<a href=#145 id=145 data-nosnippet>145</a>        .components()
+<a href=#146 id=146 data-nosnippet>146</a>        .next()
+<a href=#147 id=147 data-nosnippet>147</a>        .and_then(|component| <span class="kw">match </span>component {
+<a href=#148 id=148 data-nosnippet>148</a>            Component::Normal(part) =&gt; part.to_str(),
+<a href=#149 id=149 data-nosnippet>149</a>            <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+<a href=#150 id=150 data-nosnippet>150</a>        })
+<a href=#151 id=151 data-nosnippet>151</a>        .ok_or_else(|| {
+<a href=#152 id=152 data-nosnippet>152</a>            <span class="string">"internal asset root must start with a valid UTF-8 directory name"</span>.to_owned()
+<a href=#153 id=153 data-nosnippet>153</a>        })<span class="question-mark">?</span>;
+<a href=#154 id=154 data-nosnippet>154</a>    <span class="kw">let </span>launcher = <span class="kw">if </span><span class="macro">cfg!</span>(target_os = <span class="string">"windows"</span>) {
+<a href=#155 id=155 data-nosnippet>155</a>        <span class="string">"run-tuffite.cmd"
+<a href=#156 id=156 data-nosnippet>156</a>    </span>} <span class="kw">else </span>{
+<a href=#157 id=157 data-nosnippet>157</a>        <span class="string">"run-tuffite.sh"
+<a href=#158 id=158 data-nosnippet>158</a>    </span>};
+<a href=#159 id=159 data-nosnippet>159</a>    <span class="kw">for </span>reserved <span class="kw">in </span>[
+<a href=#160 id=160 data-nosnippet>160</a>        executable_name,
+<a href=#161 id=161 data-nosnippet>161</a>        runtime_library,
+<a href=#162 id=162 data-nosnippet>162</a>        <span class="string">"tuffite.json"</span>,
+<a href=#163 id=163 data-nosnippet>163</a>        MANIFEST_FILE,
+<a href=#164 id=164 data-nosnippet>164</a>        <span class="string">"README.txt"</span>,
+<a href=#165 id=165 data-nosnippet>165</a>        launcher,
+<a href=#166 id=166 data-nosnippet>166</a>    ] {
+<a href=#167 id=167 data-nosnippet>167</a>        <span class="kw">if </span>root == reserved {
+<a href=#168 id=168 data-nosnippet>168</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(
+<a href=#169 id=169 data-nosnippet>169</a>                <span class="string">"internal asset root top-level directory `{root}` conflicts with package-root file `{reserved}`"
+<a href=#170 id=170 data-nosnippet>170</a>            </span>));
+<a href=#171 id=171 data-nosnippet>171</a>        }
+<a href=#172 id=172 data-nosnippet>172</a>    }
+<a href=#173 id=173 data-nosnippet>173</a>    <span class="prelude-val">Ok</span>(())
+<a href=#174 id=174 data-nosnippet>174</a>}</code></pre></div></section></main></body></html>

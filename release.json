@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-10-10T14:58:56.207Z",
+  "generatedAt": "2026-10-11T15:07:45.823Z",
   "website": {
     "repository": "https://github.com/tuffite/www",
-    "commit": "ae0078d44dbbed1bba80f5f6cdc539a45a4fee90",
-    "dirty": true
+    "commit": "15a5b549833cea8266368c91a7549ac66a4e842d",
+    "dirty": false
   },
   "framework": {
     "repository": "https://github.com/tuffite/tuffite",
-    "commit": "8518fe8ebe7ef013f471956ddbc00c94dfe3ab26",
+    "commit": "e23560e5a1e4f2c330c1b904e26f62e1974e3339",
     "dirty": false
   }
 }

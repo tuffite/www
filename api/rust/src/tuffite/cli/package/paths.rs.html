@@ -25,16 +25,6 @@
 <a href=#25 id=25 data-nosnippet>25</a>}
 <a href=#26 id=26 data-nosnippet>26</a>
 <a href=#27 id=27 data-nosnippet>27</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>validate_package_name(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
-<a href=#28 id=28 data-nosnippet>28</a>    <span class="kw">if </span>value.is_empty()
-<a href=#29 id=29 data-nosnippet>29</a>        || value == <span class="string">"."
-<a href=#30 id=30 data-nosnippet>30</a>        </span>|| value == <span class="string">".."
-<a href=#31 id=31 data-nosnippet>31</a>        </span>|| !value
-<a href=#32 id=32 data-nosnippet>32</a>            .bytes()
-<a href=#33 id=33 data-nosnippet>33</a>            .all(|byte| byte.is_ascii_alphanumeric() || <span class="macro">matches!</span>(byte, <span class="string">b'-' </span>| <span class="string">b'_' </span>| <span class="string">b'.'</span>))
-<a href=#34 id=34 data-nosnippet>34</a>    {
-<a href=#35 id=35 data-nosnippet>35</a>        <span class="kw">return </span><span class="prelude-val">Err</span>(
-<a href=#36 id=36 data-nosnippet>36</a>            <span class="string">"package name must contain only ASCII letters, digits, '.', '-' or '_'"</span>.to_owned(),
-<a href=#37 id=37 data-nosnippet>37</a>        );
-<a href=#38 id=38 data-nosnippet>38</a>    }
-<a href=#39 id=39 data-nosnippet>39</a>    <span class="prelude-val">Ok</span>(())
-<a href=#40 id=40 data-nosnippet>40</a>}</code></pre></div></section></main></body></html>
+<a href=#28 id=28 data-nosnippet>28</a>    <span class="kw">super</span>::<span class="kw">super</span>::config::validate_output_name(value)
+<a href=#29 id=29 data-nosnippet>29</a>        .map_err(|error| error.replace(<span class="string">"output name"</span>, <span class="string">"package name"</span>))
+<a href=#30 id=30 data-nosnippet>30</a>}</code></pre></div></section></main></body></html>

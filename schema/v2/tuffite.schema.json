@@ -5,15 +5,12 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schemaVersion",
-    "app"
+    "app",
+    "build"
   ],
   "properties": {
     "$schema": {
       "type": "string"
-    },
-    "schemaVersion": {
-      "const": 2
     },
     "app": {
       "$ref": "#/$defs/app"
@@ -23,6 +20,12 @@
     },
     "bundle": {
       "$ref": "#/$defs/bundle"
+    },
+    "productName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Application display name and default bundle name. Defaults to the Cargo package name. Use a portable filename (up to 128 UTF-8 bytes); spaces and Unicode are supported."
     }
   },
   "$defs": {
@@ -39,7 +42,6 @@
       "required": [
         "identifier",
         "security",
-        "shellApi",
         "assets"
       ],
       "properties": {
@@ -55,29 +57,6 @@
           "minItems": 1,
           "items": {
             "$ref": "#/$defs/window"
-          }
-        },
-        "shellApi": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "namespace",
-            "definitions"
-          ],
-          "properties": {
-            "namespace": {
-              "type": "string",
-              "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*$"
-            },
-            "definitions": {
-              "$ref": "#/$defs/stringArray"
-            },
-            "facade": {
-              "enum": [
-                "application",
-                "framework"
-              ]
-            }
           }
         },
         "assets": {
@@ -239,8 +218,34 @@
         },
         "profile": {
           "type": "string"
+        },
+        "shellApi": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "namespace",
+            "definitions"
+          ],
+          "properties": {
+            "namespace": {
+              "type": "string",
+              "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*$"
+            },
+            "definitions": {
+              "$ref": "#/$defs/stringArray"
+            },
+            "facade": {
+              "enum": [
+                "application",
+                "framework"
+              ]
+            }
+          }
         }
-      }
+      },
+      "required": [
+        "shellApi"
+      ]
     },
     "bundle": {
       "type": "object",
@@ -251,6 +256,20 @@
         },
         "resources": {
           "$ref": "#/$defs/stringArray"
+        },
+        "icons": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "macos": {
+              "type": "string",
+              "description": "Project-relative .icns icon; defaults to Tuffite."
+            },
+            "windows": {
+              "type": "string",
+              "description": "Project-relative .ico icon; defaults to Tuffite."
+            }
+          }
         }
       }
     },
