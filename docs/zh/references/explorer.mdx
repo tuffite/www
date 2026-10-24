@@ -1,0 +1,113 @@
+---
+title: 'Explorer API'
+description: '嵌入、导航、通信和转移隔离的浏览器表面。'
+---
+
+import { ExplorerReference } from '@/components/docs/references/ExplorerReference';
+
+:::caution[实验性源码版本]
+生产安全加固与 SDK 发布仍在进行中。
+:::
+
+<span id="element"></span>
+
+## 元素与权限
+
+Explorer 是原生 DOM 元素 `HTMLExplorerElement`，而非 Rust 方法或 `tuffite.explorer` ShellAPI 命名空间。Framework 需要启用 `TuffiteExplorer`。在 `app.security.capabilities` 中为所属文档 origin 授予 `explorer.create`；隔离脚本执行还需要 `explorer.executeJavaScript`。嵌入页面执行原生调用或创建嵌套 Explorer 时需要自己的授权。
+
+```html
+<explorer id="browser" src="https://example.com/" navigation="emit" dialogs="emit"></explorer>
+```
+
+<span id="attributes"></span>
+
+## 属性与创建策略
+
+- `src` 请求导航；`load(url)` 显式启动页面。`contextMenuEnabled` 切换原生菜单，默认为 `false`。
+- `navigation="emit"` 拦截渲染器当前页导航；`"allow"` 在表面内导航。`dialogs="emit"` 转发对话框；`"suppress"` 拒绝它们。
+- `partition`、`navigation` 和 `dialogs` 在页面创建时固定。修改策略需重建元素。`deferred` 延迟初次创建；`load()` 可启动延迟创建的元素。
+
+<span id="navigation"></span>
+
+## 导航与隔离执行
+
+`back()`、`forward()`、`go()`、`reload()` 和 `stop()` 返回浏览器是否接受操作。`getNavigationState()` 提供 URL、标题、历史、加载状态、`documentId`、`rendererProcess` 和 `storagePartition` 诊断。`executeJavaScript()` 在隔离世界运行，源码上限为 1 MiB，结果须能序列化为 JSON。`expectedDocumentId` 可拒绝文档变化后的执行。
+
+```javascript
+const explorer = document.querySelector('#browser');
+explorer.load('https://example.com/account');
+await explorer.back();
+await explorer.forward();
+await explorer.go(-2);
+await explorer.reload({ bypassCache: true });
+await explorer.stop();
+const state = await explorer.getNavigationState();
+const result = await explorer.executeJavaScript('document.title', {
+  world: 'isolated',
+  expectedDocumentId: state.documentId,
+});
+```
+
+<span id="events"></span>
+
+## 事件与对话框
+
+- `error`：创建或挂接失败。`loadstart`、`loadstop`、`loadcommit`：导航状态。`loaderror` 还提供 `errorCode` 和 `errorDescription`。
+- `navigation`、`open`、`popup` 和 `newwindow` 在 `event.detail` 中携带 `{url, disposition, userGesture, from}`，分别表示拦截导航、普通 `window.open()`、弹出窗口及其他新窗口请求。
+- 请求事件和 `dialog` 跨 Explorer 边界冒泡至 `window.tuffite`。`stopPropagation()` 同时停止本地冒泡和跨表面转发。
+- `dialog` 的 `detail` 是 `ExplorerDialog`，包含 `type`、`message`、`defaultValue`、`isReload`、`from`、`accept(promptText)` 和 `dismiss()`。控制器只能应答一次；失效或重复应答返回 `false`。应答不会停止事件传播。
+- `detached` 与 `attached` 报告归属变更；`ExplorerTransfer` 发出 `statechange`。
+
+<span id="messaging"></span>
+
+## Explorer 树通信
+
+`element.postMessage(data)` 发给直接子页面。`window.tuffite.postMessage(data, {to})` 接受 `parent`、`top`（默认）或 `event.detail.from` 中浏览器签发的引用。消息使用 JSON，浏览器检查归属和树成员关系。`Promise<boolean>` 表示接受并投递或入队，不表示应用应答。ShellAPI `invoke` 和 `channel` 事件使用独立二进制传输。
+
+```javascript
+await explorer.postMessage({ type: 'refresh' });
+await window.tuffite.postMessage({ type: 'ready' }, { to: 'parent' });
+window.tuffite.addEventListener('message', ({ detail }) => {
+  console.log(detail.data, detail.from);
+});
+```
+
+<span id="storage"></span>
+
+## 存储分区
+
+- 省略 `partition` 共享直接父页面的实际存储后端，包括内存后端；`"shared"` 不是有效属性值。
+- `persist:name` 使用命名磁盘分区；`memory:name` 使用命名内存分区。
+- `inherit+persist:name` 和 `inherit+memory:name` 仅在目标 cookies 与 `localStorage` 均为空时复制父页面数据。这是快照，不是实时同步；不复制其他存储类型。
+- 每个 Explorer 保持独立渲染器隔离域，即使共享存储也是如此。常规 origin 规则仍然适用。
+
+<span id="transfer"></span>
+
+## 转移运行中的页面
+
+准备已连接且无 `src`、无现有页面的接收元素。`detach()` 返回 `ExplorerTransfer`，具有一次性 token 和 `pending`、`attaching`、`transferred`、`closed` 状态。成功 `attach()` 会消耗 token。废弃转移需调用 `close()`；`attaching` 时关闭会拒绝。源文档导航或销毁释放待转移页面。普通同文档 `moveBefore()` 保留现有页面，无需转移。
+
+```javascript
+const target = document.createElement('explorer');
+target.deferred = true;
+target.navigation = source.navigation;
+target.dialogs = source.dialogs;
+if (source.partition) target.partition = source.partition;
+container.append(target);
+const transfer = await source.detach();
+try {
+  await target.attach(transfer.token);
+  source.remove();
+} catch (error) {
+  await source.attach(transfer.token);
+  throw error;
+}
+```
+
+<span id="interfaces"></span>
+
+## 权威 WebIDL 接口
+
+以下声明直接从 Framework 的 Explorer WebIDL 生成，包含辅助选项字典。可在 Playground Capability Lab 中验证导航、通信、存储、对话框和转移。
+
+<ExplorerReference locale="zh" client:load />

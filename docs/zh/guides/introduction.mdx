@@ -1,0 +1,49 @@
+---
+title: '什么是 Tuffite？'
+description: '熟悉的 Web 前端，类型安全的 Rust 后端，属于你的 Chromium 运行时。'
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+:::caution[实验性源码版本]
+生产安全加固与 SDK 发布仍在进行中。
+:::
+
+<CardGrid>
+  <LinkCard
+    title="构建应用"
+    description="Rust 逻辑、Web 界面，一个类型化契约。"
+    href="/zh/guides/create-app/"
+  />
+  <LinkCard
+    title="参与框架开发"
+    description="Chromium 集成、原生能力与开发工具。"
+    href="/zh/guides/framework/"
+  />
+</CardGrid>
+
+<span id="overview"></span>
+
+## 使用熟悉的工具构建
+
+Tuffite 是一个在 Chromium 内编译原生实现的桌面应用框架。前端由 Chromium 渲染，业务逻辑位于 Rust 库中，两者通过类型化的 ShellAPI 绑定连接。
+
+Rust 库名为 `tuffite`，CLI 为 `tuff`，应用配置文件为 `tuffite.json`。Playground 通过 Rust 后端、类型化命令和 Web 前端演示完整技术栈。
+
+<span id="architecture"></span>
+
+## 一个应用，三个层次
+
+- Web 前端：使用 React、其他前端框架或原生 HTML。生成的 JavaScript 提供类型化原生调用。
+- Rust 应用：实现 `Browser`，显式注册命令处理器，并构建 `cdylib`。
+- 原生 Framework：Chromium 管理浏览器、渲染器和工具进程，版本化的 C ABI 连接 Rust 库。
+
+:::note[注意]
+Tuffite 打包自己的 Chromium 运行时。与使用系统 WebView 的框架相比，需要预留更大的原生 Distribution 体积。
+:::
+
+<span id="choose-path"></span>
+
+## 选择开发路径
+
+应用开发者使用 `tuff`、生成绑定和兼容的 Framework Distribution。Framework 贡献者还需要 Chromium 工作区、`x.py` 和 `spo` 补丁栈。开发自己的应用时安装 CLI；贡献 Framework 时再克隆外层工作区。

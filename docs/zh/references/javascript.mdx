@@ -1,0 +1,101 @@
+---
+title: 'JavaScript 与 ShellAPI'
+description: '直接源自代码的类型化 ES 模块客户端与 Mojom 契约。'
+---
+
+import { JavascriptPackageReference } from '@/components/docs/references/JavascriptPackageReference';
+import { JavascriptReference } from '@/components/docs/references/JavascriptReference';
+
+:::caution[实验性源码版本]
+生产安全加固与 SDK 发布仍在进行中。
+:::
+
+<span id="usage"></span>
+
+## 使用生成的原生门面
+
+原生方法返回 Promise，并要求匹配 origin 的能力授权。下面的 Framework 契约来自已提交的 `.mojom` 源码，JavaScript 类型来自生成的包导出。`int64`/`uint64` 映射为 `bigint`，`array<uint8>` 映射为 `Uint8Array`，枚举使用 `BaseDirectory.Data` 等数值，不能传入 `"data"` 字符串。未打包的原生页面可以从 `/tuffite.js` 导入。
+
+```javascript
+import { window as nativeWindow, fs, BaseDirectory } from 'tuffite';
+const windows = await nativeWindow.list();
+const bytes = await fs.readFile(BaseDirectory.Data, 'settings.json');
+```
+
+<span id="bridge"></span>
+
+## `window.tuffite` 桥接对象
+
+原生运行时在符合条件的应用和 Explorer 主文档中提供 `window.tuffite`。`NativeBridge` 契约包含 `invoke()`、`postMessage()`、`addEventListener()` 和 `removeEventListener()`。生成的业务客户端通过 ES 模块导出，不会扩展此对象。普通浏览器标签页不提供原生桥接对象。
+
+<span id="listeners"></span>
+
+## 订阅与移除事件监听
+
+监听使用 `EventTarget` API。`addEventListener(type, listener, options?)` 接受 `capture` 布尔值或 `AddEventListenerOptions`，包括 `once` 和 `signal`。`removeEventListener(type, listener, options?)` 须使用相同函数和匹配的 `capture` 值。在 React 中可在 effect 内订阅，并在清理函数中移除监听。
+
+- `channel`：原生应用事件，detail 为 `{channel, data: Uint8Array}`。按应用事件契约解码 data，不会自动转换成 JSON。
+- `message`：Explorer 树的 JSON 消息，detail 为 `{data, from}`。名为 `message` 的业务 channel 仍通过 `channel` 事件类型接收。
+- `navigation`、`open`、`popup`、`newwindow`：冒泡的 Explorer 请求，detail 为 `{url, disposition, userGesture, from}`。`dialog`：带 `accept()` 和 `dismiss()` 的 `ExplorerDialogController`。传播和归属规则参见 Explorer API。
+
+```javascript
+const onChannel = (event) => {
+  const { channel, data } = event.detail; // data: Uint8Array
+  if (channel === 'app:changed') {
+    console.log(channel, data);
+  }
+};
+window.tuffite.addEventListener('channel', onChannel);
+
+// During component cleanup, use the same listener reference.
+window.tuffite.removeEventListener('channel', onChannel);
+```
+
+<span id="messages"></span>
+
+## 发送 Explorer 消息
+
+`postMessage(data, {to}?)` 返回 `Promise<boolean>`。默认目标为 `top`，也接受 `parent` 和浏览器签发的表面引用。data 须能序列化为 JSON。浏览器验证路由和归属。`true` 表示接受并投递或入队，不表示接收方应答。
+
+```javascript
+await window.tuffite.postMessage({ type: 'ready' }, { to: 'parent' });
+const onMessage = ({ detail: { data, from } }) => {
+  console.log(data, from);
+};
+window.tuffite.addEventListener('message', onMessage);
+// Later:
+window.tuffite.removeEventListener('message', onMessage);
+```
+
+<span id="invoke"></span>
+
+## 底层二进制调用
+
+`invoke(channel, payload)` 返回 `Promise<Uint8Array>`，并要求对应路由的原生权限。它不经过 Explorer 树，不接受 `to` 选项。普通应用调用应使用生成的类型化门面，它们处理命令标识、编解码器、schema 指纹和协议验证。
+
+```javascript
+const response = await window.tuffite.invoke(route, binaryPayload);
+// binaryPayload and response are Uint8Array.
+```
+
+<span id="runtime"></span>
+
+## 运行时辅助与错误
+
+`tuffite` 根导出包含 `TuffiteError`、`invokeBinary()`、`createMojomCommandApi()`、`invokeFrameworkMojom`、`encodeMojom()`、`decodeMojom()`、编解码与桥接类型，以及类型化 Framework 客户端。`TuffiteError` 提供 code 以及可选 `requestId`/cause。原生应用包以 `/tuffite.js` 提供 SDK，不再单独导出 `tuffite/runtime`。
+
+<span id="package-exports"></span>
+
+## JavaScript 包导出
+
+下面的完整声明从 JavaScript 包 `exports` 中的每个 `types` 入口生成，包含 `NativeBridge` 事件重载、运行时辅助、Explorer 类型和仅用于开发的 Vite 插件。可按导出路径、类型或成员名称筛选。
+
+<JavascriptPackageReference locale="zh" client:load />
+
+<span id="modules"></span>
+
+## Framework 模块
+
+展开 Mojom 文件可查看源码、类型、显式方法序号和规范权限名。JS 客户端使用 `camelCase`（`fs.readFile`），原生路由和授权保留 IDL 拼写（`tuffite.Fs.ReadFile`）。契约不传递句柄，schema 必须与 SDK 和 Framework 二进制匹配。
+
+<JavascriptReference locale="zh" client:load />

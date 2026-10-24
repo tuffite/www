@@ -1,0 +1,41 @@
+---
+title: 'Rust API'
+description: 'The public tuffite facade, application lifecycle, and build helpers.'
+---
+
+import { RustReference } from '@/components/docs/references/RustReference';
+
+:::caution[Experimental source release]
+Production hardening and published SDK packages are still in progress.
+:::
+
+<span id="core"></span>
+
+## `Application` entry points
+
+- `Browser` — implement `new(BrowserContext)` to construct browser process state.
+- `app::Builder<B>` — register browser commands and prepare process startup.
+- `BrowserContext` — access configuration bytes, events, executor, native ShellAPI, named Rust and V8 utilities.
+- `#[tuffite::main(browser = App, utilities(Indexer, Parser))]`, `#[tuffite::browser]`, `#[tuffite::utility(name = "parser")]` — explicitly assemble process definitions.
+
+<span id="features"></span>
+
+## Feature flags & `build` helpers
+
+`build` enables Distribution resolution, ShellAPI code generation, and application `build` helpers. `cli` is enabled by default and adds the `tuff` binary. `async` enables `ChromiumTask` integration. Applications set `default-features = false` to avoid CLI dependencies. `build::framework::Resolver`, `build::shell_api::Generator`, and `build::Builder` belong to the `build` API; the runtime `Builder` is a different type.
+
+```toml
+[dependencies]
+tuffite = { version = "0.1.0", default-features = false }
+
+[build-dependencies]
+tuffite = { version = "0.1.0", default-features = false, features = ["build"] }
+```
+
+<span id="symbols"></span>
+
+## Public runtime symbols
+
+This index is generated from the SDK facade during site builds. Detailed Rust signatures and doc examples can be generated with `bun run docs:rust` and served at `/api/rust/tuffite/`.
+
+<RustReference locale="en" client:load />

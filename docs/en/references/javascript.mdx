@@ -1,0 +1,101 @@
+---
+title: 'JavaScript & ShellAPI'
+description: 'Typed ES module clients and Mojom contracts, straight from source.'
+---
+
+import { JavascriptPackageReference } from '@/components/docs/references/JavascriptPackageReference';
+import { JavascriptReference } from '@/components/docs/references/JavascriptReference';
+
+:::caution[Experimental source release]
+Production hardening and published SDK packages are still in progress.
+:::
+
+<span id="usage"></span>
+
+## Use the generated native facade
+
+Native methods return promises and require a matching origin capability. Framework contracts below come from checked-in `.mojom` sources; JavaScript types come from generated package exports. `int64`/`uint64` map to `bigint`, `array<uint8>` to `Uint8Array`, and enums to numeric values such as `BaseDirectory.Data`. Strings such as `"data"` are not enum values. Unbundled native pages can import from `/tuffite.js`.
+
+```javascript
+import { window as nativeWindow, fs, BaseDirectory } from 'tuffite';
+const windows = await nativeWindow.list();
+const bytes = await fs.readFile(BaseDirectory.Data, 'settings.json');
+```
+
+<span id="bridge"></span>
+
+## The `window.tuffite` bridge
+
+The native runtime exposes `window.tuffite` in eligible application and Explorer main documents. Its `NativeBridge` contract includes `invoke()`, `postMessage()`, `addEventListener()`, and `removeEventListener()`. Generated business clients are ES module exports and do not extend this object. A normal browser tab does not provide the native bridge.
+
+<span id="listeners"></span>
+
+## Subscribe and unsubscribe to events
+
+Listeners use the `EventTarget` API. `addEventListener(type, listener, options?)` accepts a `capture` boolean or `AddEventListenerOptions`, including `once` and `signal`. `removeEventListener(type, listener, options?)` must use the same function and matching `capture` value. In React, subscribe in an effect and remove the listener in its cleanup.
+
+- `channel` — native application events, with `{channel, data: Uint8Array}`. Decode data using your application event contract; it is not automatically JSON.
+- `message` — Explorer-tree JSON messages, with `{data, from}`. A business channel named `message` is still received through the `channel` event type.
+- `navigation`, `open`, `popup`, `newwindow` — bubbled Explorer requests with `{url, disposition, userGesture, from}`. `dialog` — an `ExplorerDialogController` with `accept()` and `dismiss()`. See Explorer API for propagation and ownership rules.
+
+```javascript
+const onChannel = (event) => {
+  const { channel, data } = event.detail; // data: Uint8Array
+  if (channel === 'app:changed') {
+    console.log(channel, data);
+  }
+};
+window.tuffite.addEventListener('channel', onChannel);
+
+// During component cleanup, use the same listener reference.
+window.tuffite.removeEventListener('channel', onChannel);
+```
+
+<span id="messages"></span>
+
+## Send Explorer messages
+
+`postMessage(data, {to}?)` returns `Promise<boolean>`. The default target is `top`; `parent` and browser-issued surface refs are also accepted. Data must be JSON-serializable. The browser validates routing and ownership. A `true` result reports acceptance and delivery or queueing, not a response from the recipient.
+
+```javascript
+await window.tuffite.postMessage({ type: 'ready' }, { to: 'parent' });
+const onMessage = ({ detail: { data, from } }) => {
+  console.log(data, from);
+};
+window.tuffite.addEventListener('message', onMessage);
+// Later:
+window.tuffite.removeEventListener('message', onMessage);
+```
+
+<span id="invoke"></span>
+
+## Low-level binary invocation
+
+`invoke(channel, payload)` returns `Promise<Uint8Array>` and requires the route’s native permission. It does not route through the Explorer tree or accept a `to` option. Use generated typed facades for normal application calls; they handle command identities, codecs, schema fingerprints, and protocol validation.
+
+```javascript
+const response = await window.tuffite.invoke(route, binaryPayload);
+// binaryPayload and response are Uint8Array.
+```
+
+<span id="runtime"></span>
+
+## Runtime helpers and errors
+
+The `tuffite` root export includes `TuffiteError`, `invokeBinary()`, `createMojomCommandApi()`, `invokeFrameworkMojom`, `encodeMojom()`, `decodeMojom()`, and codec/bridge types alongside typed Framework clients. `TuffiteError` provides code and optional `requestId`/cause. Native packages serve this SDK as `/tuffite.js`; there is no separate `tuffite/runtime` export.
+
+<span id="package-exports"></span>
+
+## JavaScript package exports
+
+The complete declarations below are generated from every `types` entry in the JavaScript package `exports`. This includes `NativeBridge` event overloads, runtime helpers, Explorer types, and the development-only Vite plugin. Filter by export path, type, or member name.
+
+<JavascriptPackageReference locale="en" client:load />
+
+<span id="modules"></span>
+
+## Framework modules
+
+Expand a Mojom file to inspect its source, types, explicit method ordinals, and canonical permission names. JS clients use `camelCase` (`fs.readFile`); native routes and grants keep IDL spelling (`tuffite.Fs.ReadFile`). Contracts are handle-free and schemas must match the SDK and Framework binaries.
+
+<JavascriptReference locale="en" client:load />

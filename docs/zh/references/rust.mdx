@@ -1,0 +1,41 @@
+---
+title: 'Rust API'
+description: 'tuffite 公共门面、应用生命周期和构建辅助 API。'
+---
+
+import { RustReference } from '@/components/docs/references/RustReference';
+
+:::caution[实验性源码版本]
+生产安全加固与 SDK 发布仍在进行中。
+:::
+
+<span id="core"></span>
+
+## 应用入口
+
+- `Browser`：实现 `new(BrowserContext)` 创建 browser 进程状态。
+- `app::Builder<B>`：注册 browser 命令并处理进程启动准备。
+- `BrowserContext`：访问配置字节、事件、执行器、原生 ShellAPI、具名 Rust 和 V8 utility。
+- `#[tuffite::main(browser = App, utilities(Indexer, Parser))]`、`#[tuffite::browser]`、`#[tuffite::utility(name = "parser")]`：显式组合进程定义。
+
+<span id="features"></span>
+
+## Feature 开关与构建辅助
+
+`build` 启用 Distribution 解析、ShellAPI 代码生成和应用构建辅助。`cli` 默认启用，提供 `tuff` 二进制；`async` 启用 `ChromiumTask` 集成。应用设置 `default-features = false` 避免引入 CLI 依赖。`build::framework::Resolver`、`build::shell_api::Generator` 和 `build::Builder` 属于构建 API，运行时 `Builder` 是另一种类型。
+
+```toml
+[dependencies]
+tuffite = { version = "0.1.0", default-features = false }
+
+[build-dependencies]
+tuffite = { version = "0.1.0", default-features = false, features = ["build"] }
+```
+
+<span id="symbols"></span>
+
+## 公共运行时符号
+
+此索引在站点构建时从 SDK 门面生成。执行 `bun run docs:rust` 可以生成详细 Rust 签名与文档示例，并在 `/api/rust/tuffite/` 提供访问。
+
+<RustReference locale="zh" client:load />

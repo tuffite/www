@@ -1,28 +1,29 @@
 # Tuffite documentation
 
-An experimental source-release documentation site. Published SDK packages and
-production hardening are still in progress; the default getting-started path
-uses the source workspace and Playground.
+The bilingual documentation site for [tuffite.org](https://tuffite.org), maintained
+as the independent `www/` submodule of the outer workspace. It uses **Astro +
+Starlight**, Markdown/MDX articles, and React islands for interactive API references.
+Astro builds static HTML; Starlight provides navigation, language switching, table
+of contents, code highlighting, theme switching, and Pagefind search.
 
-The official bilingual site for [tuffite.org](https://tuffite.org), maintained as
-an independent Git submodule at the outer workspace's `www/`. The site uses Bun,
-React, Vite, shadcn/ui source components, and Tailwind CSS. It covers application
-Guides, Framework contributor Guides, Rust/JavaScript API References, the CLI,
-and `tuffite.json` configuration. Playground is the application example.
+This is an experimental source release. Production hardening and published SDK
+packages are still in progress. Playground is the application example.
 
 Repositories: [Framework](https://github.com/tuffite/tuffite),
 [workspace](https://github.com/tuffite/workspace), and
 [website](https://github.com/tuffite/www).
 
-From the prepared outer workspace:
+## Development
+
+Use the prepared outer workspace, including its pinned Bun, Node.js, and Rust:
 
 ```sh
-mise run www        # Development server: http://127.0.0.1:5190
-mise run www:check  # Type checks and documentation contracts
-mise run www:build  # Static site including full Rustdoc
+mise run www        # http://127.0.0.1:5190
+mise run www:check  # Formatting, Astro/TypeScript checks, documentation tests
+mise run www:build  # Static site, generated references, search index, Rustdoc
 ```
 
-Or from this submodule:
+Or, with those tools active, from this submodule:
 
 ```sh
 bun install --frozen-lockfile
@@ -32,119 +33,188 @@ bun run build
 bun run preview
 ```
 
-## Source and generated references
+The Astro and Starlight versions in `package.json` support the workspace's Node
+22.22 toolchain. Upgrade compatible integrations together when updating Astro.
+No Cloudflare adapter or server runtime is needed for this static site.
 
-`src/content/pages/` owns English and Simplified Chinese articles, one file per
-page. `src/content.ts` defines their display order and route lookup; shared types
-and examples live in `src/content/types.ts` and `src/content/examples.ts`.
-`src/components/docs/` contains the navigation, search, article renderer, and
-API reference components. `src/App.tsx` coordinates route, theme, and menu state. Every article and
-section has both translations. Routes are `/<en|zh>/guides/<slug>/` and
-`/<en|zh>/references/<slug>/`. Search indexes guides and source-derived reference
-content. The UI supports theme switching, keyboard search, responsive navigation,
-copyable code, and a page table of contents.
+## Writing Markdown and MDX
+
+Content is checked in directly under `docs/`. There is no article
+object format or Markdown conversion step at build time:
+
+```text
+docs/
+├── en/
+│   ├── guides/commands.md
+│   └── references/javascript.mdx
+└── zh/
+    ├── guides/commands.md
+    └── references/javascript.mdx
+```
+
+Use the same relative filename in both languages. Files map to the existing
+`/en/guides/.../`, `/zh/guides/.../`, and corresponding reference routes. The root
+and language roots redirect to the introduction. Keep existing section anchor
+spans when editing migrated pages so old fragment links continue to work.
+
+A normal guide only needs Markdown with YAML frontmatter:
+
+````markdown
+---
+title: Call Rust from the frontend
+description: Declare a Mojom contract and call a typed Rust implementation.
+---
+
+## Declare the contract
+
+Save the contract as `shell_api.mojom`.
+
+```mojom
+module myapp;
+interface Commands {
+  Ping@0(string message) => (string result);
+};
+```
+````
+
+Use inline code for filenames, paths, commands, flags, configuration keys, and API
+symbols in prose (for example, `x.py`, `tuffite.json`, and
+`tuffite::build::framework::Resolver`). Keep ordinary explanatory text unmarked.
+
+Use `.mdx` when a page needs a component. For example:
+
+```mdx
+import { JavascriptReference } from '@/components/docs/references/JavascriptReference';
+
+<JavascriptReference locale="en" client:load />
+```
+
+React components are rendered into the static HTML and hydrated for filtering
+and copying. Ordinary Markdown pages need no React island. `astro.config.mjs`
+owns bilingual navigation, branding, redirects, and site metadata;
+`src/content.config.ts` loads the root `docs/` directory with Astro's glob loader. Add new pages to
+the appropriate sidebar group. Page titles come from translated frontmatter.
+React reference UI translations use **i18next + react-i18next**, with typed keys in
+`src/locales/en.json` and `src/locales/zh.json`. Components call
+`useUiTranslation(locale)` from `src/i18n.ts`; the locale comes from the MDX page.
+Bundled resources initialize synchronously, and each language has its own instance
+so static rendering and hydration use the same language. Starlight manages the
+article translations, language routes, and built-in navigation UI.
+
+Custom styling is in `src/styles.css`; the license footer is
+`src/components/Footer.astro`.
+
+See [Starlight authoring](https://starlight.astro.build/guides/authoring-content/)
+and [internationalization](https://starlight.astro.build/guides/i18n/).
+
+## Source-derived references and Rustdoc
 
 `scripts/generate-reference.ts` reads `../src/tuffite` by default. Set
-`TUFFITE_FRAMEWORK_DIR` when the SDK is elsewhere. It generates the configuration
-reference from `schemas/tuffite.schema.json`, JavaScript reference from native
-`.d.ts` declarations, and the Rust symbol index from the public SDK facade.
-Generated reference data and the copied public schema are ignored; the
-Framework remains the authority.
+`TUFFITE_FRAMEWORK_DIR` if the SDK checkout is elsewhere. It generates:
 
-Production builds also run Cargo documentation in the Framework checkout and
-copy the resulting Rustdoc into `/api/rust/`. Rustdoc generation uses an isolated `.cache/rustdoc` target directory and clears
-its documentation before building. Shared `CARGO_TARGET_DIR` output is never
-copied into the website; dependency compilation in the dedicated cache is reused.
-`prerender.ts` renders every bilingual route into standalone HTML with canonical
-and language-alternate metadata, then creates `sitemap.xml` and `robots.txt`.
-Serve `dist/` using a static web server with directory index support. No API
-server, database, or SPA-only rewrite is required for documentation routes.
+- Configuration data and the public schema from `schemas/tuffite.schema.json`.
+- Framework contracts and canonical permissions from `framework/shell_api/*.mojom`.
+- JavaScript declarations from every `types` entry in the SDK package exports.
+- Explorer declarations from WebIDL and Rust symbols from the public SDK facade.
 
-## Maintainer publishing
+Generated JSON, the copied schema, and generated Rustdoc are ignored. Edit the
+Framework sources, then run `bun run generate` to refresh the reference data.
+Builds index the rendered articles and reference content with Pagefind.
 
-Cloudflare serves the `release` branch directly. That branch contains only the
-contents of `dist/`, including generated references and Rustdoc. It needs no Bun,
-Rust, Framework checkout, or build command on Cloudflare.
+Production builds run Cargo documentation in the Framework checkout and copy the
+result into `/api/rust/`. Rustdoc uses an isolated `.cache/rustdoc` target directory,
+clearing its old documentation before rebuilding. Shared `CARGO_TARGET_DIR` docs
+are never copied into the website; cached dependency compilation is reused.
+Rustdoc requires the Rust toolchain and available Cargo dependencies, so builds
+run locally or in a prepared CI environment.
 
-From the website checkout, using a prepared Framework checkout:
+## Deploy to Cloudflare Pages from the command line
+
+Cloudflare receives the **contents of `dist/`**. Build and review locally, then
+upload with the pinned Wrangler CLI. A `release` Git branch is no longer needed;
+preparing a deployment does not change Git refs or publish anything.
+
+All commands below run from `www/`. First authenticate and find the project:
 
 ```sh
-bun install --frozen-lockfile
-# Optional when the Framework is outside the outer workspace:
-# export TUFFITE_FRAMEWORK_DIR=/path/to/tuffite
-bun run release:prepare
+bunx --no-install wrangler login
+bunx --no-install wrangler pages project list
+```
+
+If this is a new Pages project, create it once. Replace `YOUR_PROJECT` with your
+chosen project name; the example uses `main` as its production branch:
+
+```sh
+bunx --no-install wrangler pages project create YOUR_PROJECT --production-branch main
+```
+
+For an existing project, use its actual name and configured production branch.
+For example, a project previously published from `release` should use
+`--branch release` for production. A different branch creates a preview deployment.
+
+Prepare and inspect the site:
+
+```sh
+bun run deploy:prepare
 bun run preview
 ```
 
-`release:prepare` runs documentation checks, builds and prerenders the full site, checks
-required pages and Pages asset limits, then updates the **local** `release` branch.
-It uses a temporary Git index without switching branches or modifying your
-staging area. `/release.json` records website and Framework commits and whether
-either checkout had local changes. For a reproducible release, commit source
-changes first. Use the desired Framework tag or commit before running `release:prepare`.
+`deploy:prepare` runs checks and the full build. The build validates required
+artifacts, Pages asset limits, and writes `/release.json` with website/Framework
+commit IDs and dirty flags. For reproducibility, commit source changes and select
+the desired Framework revision before preparing. It never uploads assets.
 
-Inspect the preview (including both languages and `/api/rust/tuffite/`), review
-the deployment diff, then publish explicitly:
+After reviewing both languages, API filters, search, and `/api/rust/tuffite/`,
+stop the preview server and deploy:
 
 ```sh
-git diff --stat release@{1} release # After the first release, compare with the previous deployment
-git push origin release
+bun run deploy --project-name YOUR_PROJECT --branch main
 ```
 
-Keep the local `release` branch up to date with the remote before preparing a
-release on another machine (`git fetch origin release:release`). Publishing uses a
-normal push, without force. `bun run build` alone does not update any branch;
-`bun run release:prepare` does not push to GitHub.
-
-In Cloudflare **Workers & Pages → Create application → Pages → Connect to Git**:
-
-- Repository: `tuffite/www`; production branch: `release`.
-- Framework preset: None; build command: **empty**.
-- Root directory: repository root; output directory: `.`.
-- Disable preview builds for other branches, which contain source rather than
-  published assets.
-- Add `tuffite.org` under Custom domains after the first deployment.
-
-Only pushes to `release` publish production updates. Content edits on `main`
-remain unpublished until a maintainer prepares and pushes a new release.
-
-## Icon assets
-
-Run `bun run icons` to regenerate all assets from the shared geometric logo.
-The generator also runs before reference generation and builds.
-
-- `/favicon.svg` and `/favicon.ico`: rounded browser icons; ICO contains 16, 32, and 48 px frames.
-- `/favicon-square.svg` and `/favicon-square.ico`: full square backgrounds without rounded corners.
-- `/icons/tuffite-{rounded,square}-{size}.png`: 16, 32, 48, 64, 128, 180, 192, 256, and 512 px.
-- `/icons/mark.svg`: transparent logo mark for use on a custom background.
-- `/apple-touch-icon.png`: 180 px square icon; iOS applies its own shape.
-- `/site.webmanifest`: 192 and 512 px square icons for installable/maskable contexts.
-
-## Formatting
-
-Prettier formats the website's TypeScript, TSX, CSS, HTML, JSON, and Markdown:
+`deploy` validates the existing `dist/` and invokes `wrangler pages deploy dist`.
+It does not rebuild it; rebuild first if source files changed. Wrangler prints the
+deployment URL. To create a preview instead:
 
 ```sh
-bun run format        # Apply formatting
-bun run format:check  # Check without modifying files
+bun run deploy --project-name YOUR_PROJECT --branch docs-preview
 ```
 
-`bun run check` includes formatting checks. Generated references, icon assets,
-Rustdoc, build output, and the Bun lockfile are excluded from formatting.
+An existing Git-integrated Pages project can also receive Wrangler deployments.
+If switching entirely to CLI uploads, disable automatic production and preview
+Git deployments in that project's build settings. A new Direct Upload project
+cannot later be converted to Git integration without creating a new project.
+Custom domains such as `tuffite.org` remain configured on the Pages project.
 
-`release:prepare` describes a local preparation step; publishing remains the
-explicit `git push origin release` command after preview and review. The `release`
-branch is the website's static publication branch, not a Framework version branch.
+For CI, provide `CLOUDFLARE_API_TOKEN` (Account → Cloudflare Pages → Edit) and
+`CLOUDFLARE_ACCOUNT_ID` as CI secrets, then run:
 
-## License and release checks
+```sh
+bun install --frozen-lockfile
+bun run deploy:prepare
+bun run deploy --project-name YOUR_PROJECT --branch main
+```
 
-Website-owned source uses [MIT OR Apache-2.0](LICENSE); adapted shadcn/ui components
-retain their MIT notice in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-Builds include `/LICENSE.txt`, `/THIRD_PARTY_NOTICES.txt`, and Vite-generated
-`/THIRD_PARTY_LICENSES.md` for bundled dependencies. Release preparation checks
-that these files exist. Generated Rustdoc retains its own third-party notices.
+The CI checkout must include the matching Framework and Rust toolchain for
+Rustdoc. Keep tokens out of Git. Local `.env*` and `.wrangler/` are ignored.
 
-Before making the repository public, inspect the exact refs to publish with the
-Framework's `scripts/audit_public_refs.py`. Use explicit branch pushes; do not
-mirror local remote-tracking refs, stashes, or legacy Framework tags. See
+Official references: [Wrangler Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/),
+[CI credentials and deployment](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/),
+[existing Git-integrated projects](https://developers.cloudflare.com/pages/configuration/git-integration/).
+
+## Formatting, icons, and licenses
+
+```sh
+bun run format        # Prettier for Markdown, MDX, Astro, TypeScript, CSS, JSON
+bun run format:check
+bun run icons         # Regenerate the shared geometric logo and icon variants
+```
+
+Generated references, icon assets, Rustdoc, build output, and the Bun lockfile are
+excluded from formatting. Production output includes `/LICENSE.txt`,
+`/THIRD_PARTY_NOTICES.txt`, and `/THIRD_PARTY_LICENSES.md` for bundled dependencies.
+Website-owned source uses [MIT OR Apache-2.0](LICENSE). Generated Rustdoc retains
+its own third-party notices.
+
+Before making repository refs public, inspect the exact refs with the Framework's
+`scripts/audit_public_refs.py`. See
 [public release preparation](../src/tuffite/docs/public-release.md) in the workspace.

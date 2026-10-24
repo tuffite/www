@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Check, Copy } from 'lucide-react';
-import { t, type Locale } from '@/content';
-import { ui } from '@/strings';
+import { useUiTranslation, type Locale } from '@/i18n';
 
 export function CodeBlock({
   code,
@@ -12,6 +11,7 @@ export function CodeBlock({
   language?: string;
   locale: Locale;
 }) {
+  const { t } = useUiTranslation(locale);
   const [copied, setCopied] = useState(false);
   const [failed, setFailed] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -31,14 +31,10 @@ export function CodeBlock({
     <div className="code-block">
       <div className="code-heading">
         <span>{language}</span>
-        <button onClick={copy} aria-label={ui.copy[locale]}>
+        <button onClick={copy} aria-label={t('common.copy')}>
           {copied ? <Check size={14} /> : <Copy size={14} />}
           <span>
-            {failed
-              ? t('Select code to copy', '请选择代码复制')[locale]
-              : copied
-                ? ui.copied[locale]
-                : ui.copy[locale]}
+            {failed ? t('common.selectToCopy') : copied ? t('common.copied') : t('common.copy')}
           </span>
         </button>
       </div>
@@ -46,7 +42,7 @@ export function CodeBlock({
         <code>{code}</code>
       </pre>
       <span className="sr-only" role="status">
-        {copied ? ui.copied[locale] : ''}
+        {copied ? t('common.copied') : ''}
       </span>
     </div>
   );

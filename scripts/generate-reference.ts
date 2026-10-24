@@ -16,16 +16,20 @@ await writeFile(
 );
 const modules = [];
 for (const name of (await readdir(resolve(root, 'framework/shell_api')))
-  .filter((n) => n.endsWith('.d.ts'))
+  .filter((n) => n.endsWith('.mojom'))
   .sort()) {
   const source = await readFile(resolve(root, 'framework/shell_api', name), 'utf8');
   modules.push({
-    name: name.replace('.d.ts', ''),
+    name: name.replace('.mojom', ''),
+    file: name,
     source,
-    methods: [...source.matchAll(/export function (\w+)\(([^;]*);/g)].map((m) => ({
-      name: m[1],
-      signature: `${m[1]}(${m[2]};`,
-    })),
+    methods: [...source.matchAll(/interface\s+(\w+)\s*\{([^}]+)\}/g)].flatMap((iface) =>
+      [...iface[2].matchAll(/(\w+)@(\d+)\s*\(([^)]*)\)\s*=>\s*\(([^)]*)\)\s*;/g)].map((method) => ({
+        name: method[1],
+        route: `tuffite.${iface[1]}.${method[1]}`,
+        signature: method[0].replace(/\s+/g, ' '),
+      })),
+    ),
   });
 }
 const facade = await readFile(resolve(root, 'crates/tuffite/src/lib.rs'), 'utf8');
@@ -68,5 +72,5 @@ for (const [path, entry] of Object.entries(javascriptPackage.exports) as [
 const data = { schema, modules, rustSymbols, cliCommands, explorer, javascriptExports };
 await writeFile(resolve(www, 'src/reference.generated.json'), JSON.stringify(data, null, 2) + '\n');
 console.log(
-  `Reference: ${Object.keys(schema.$defs).length} configuration types, ${modules.length} JS modules, ${rustSymbols.length} Rust symbols`,
+  `Reference: ${Object.keys(schema.$defs).length} configuration types, ${modules.length} Mojom contracts, ${rustSymbols.length} Rust symbols`,
 );

@@ -1,0 +1,113 @@
+---
+title: 'Explorer API'
+description: 'Embed, navigate, message, and transfer isolated browser surfaces.'
+---
+
+import { ExplorerReference } from '@/components/docs/references/ExplorerReference';
+
+:::caution[Experimental source release]
+Production hardening and published SDK packages are still in progress.
+:::
+
+<span id="element"></span>
+
+## Element and permissions
+
+Explorer is a native DOM element, `HTMLExplorerElement`, rather than a Rust method or a `tuffite.explorer` ShellAPI namespace. The Framework must enable `TuffiteExplorer`. Grant `explorer.create` to the owning document origin in `app.security.capabilities`; isolated script execution additionally requires `explorer.executeJavaScript`. Guest documents need their own grants for native calls or nested Explorers.
+
+```html
+<explorer id="browser" src="https://example.com/" navigation="emit" dialogs="emit"></explorer>
+```
+
+<span id="attributes"></span>
+
+## Properties and creation policy
+
+- `src` requests navigation; `load(url)` explicitly starts a page. `contextMenuEnabled` toggles the native menu and defaults to `false`.
+- `navigation="emit"` intercepts renderer current-tab navigation; `"allow"` navigates inside the surface. `dialogs="emit"` forwards dialogs; `"suppress"` rejects them.
+- `partition`, `navigation`, and `dialogs` are frozen when a page is created. Recreate the element to change that policy. `deferred` delays initial creation; `load()` can start a deferred element.
+
+<span id="navigation"></span>
+
+## Navigation and isolated execution
+
+`back()`, `forward()`, `go()`, `reload()`, and `stop()` resolve to whether the browser accepted the operation. `getNavigationState()` exposes URL, title, history, loading state, `documentId`, `rendererProcess`, and `storagePartition` diagnostics. `executeJavaScript()` runs in an isolated world, limits source to 1 MiB, and requires a JSON-serializable result. `expectedDocumentId` rejects execution after a document changes.
+
+```javascript
+const explorer = document.querySelector('#browser');
+explorer.load('https://example.com/account');
+await explorer.back();
+await explorer.forward();
+await explorer.go(-2);
+await explorer.reload({ bypassCache: true });
+await explorer.stop();
+const state = await explorer.getNavigationState();
+const result = await explorer.executeJavaScript('document.title', {
+  world: 'isolated',
+  expectedDocumentId: state.documentId,
+});
+```
+
+<span id="events"></span>
+
+## Events and dialogs
+
+- `error`: creation or attachment failed. `loadstart`, `loadstop`, `loadcommit`: navigation state. `loaderror` also provides `errorCode` and `errorDescription`.
+- `navigation`, `open`, `popup`, and `newwindow` carry `{url, disposition, userGesture, from}` in `event.detail`. They describe intercepted navigation, ordinary `window.open()`, popups, and other new-window requests respectively.
+- Request events and `dialog` bubble across Explorer boundaries to `window.tuffite`. `stopPropagation()` stops both local bubbling and cross-surface forwarding.
+- `dialog` detail is an `ExplorerDialog` with `type`, `message`, `defaultValue`, `isReload`, `from`, `accept(promptText)`, and `dismiss()`. A controller answers once; stale or repeated responses return `false`. Answering does not stop propagation.
+- `detached` and `attached` report ownership changes; `ExplorerTransfer` emits `statechange`.
+
+<span id="messaging"></span>
+
+## Explorer-tree messaging
+
+`element.postMessage(data)` targets its direct child. `window.tuffite.postMessage(data, {to})` accepts `parent`, `top` (the default), or a browser-issued ref from `event.detail.from`. Messages are JSON; browser ownership and tree membership checks apply. `Promise<boolean>` indicates acceptance and delivery/queueing, not an application reply. ShellAPI `invoke` and `channel` events use a separate binary transport.
+
+```javascript
+await explorer.postMessage({ type: 'refresh' });
+await window.tuffite.postMessage({ type: 'ready' }, { to: 'parent' });
+window.tuffite.addEventListener('message', ({ detail }) => {
+  console.log(detail.data, detail.from);
+});
+```
+
+<span id="storage"></span>
+
+## Storage partitions
+
+- Omitting `partition` shares the immediate parent’s exact storage backend, including an in-memory backend; `"shared"` is not a valid attribute value.
+- `persist:name` creates a named disk-backed partition; `memory:name` creates a named in-memory partition.
+- `inherit+persist:name` and `inherit+memory:name` seed parent cookies and `localStorage` only when both destination stores are empty. This is a snapshot, not live synchronization; other storage types are not copied.
+- Every Explorer retains its own renderer isolation domain, including when storage is shared. Ordinary origin rules continue to apply.
+
+<span id="transfer"></span>
+
+## Transfer a live page
+
+Prepare a connected receiver without `src` or an existing page. `detach()` returns an `ExplorerTransfer` with a one-use token and `pending`, `attaching`, `transferred`, or `closed` state. Successful `attach()` consumes the token. Call `close()` for abandoned transfers; closing while `attaching` rejects. Source document navigation or teardown releases pending pages. An ordinary same-document `moveBefore()` preserves the existing page without a transfer.
+
+```javascript
+const target = document.createElement('explorer');
+target.deferred = true;
+target.navigation = source.navigation;
+target.dialogs = source.dialogs;
+if (source.partition) target.partition = source.partition;
+container.append(target);
+const transfer = await source.detach();
+try {
+  await target.attach(transfer.token);
+  source.remove();
+} catch (error) {
+  await source.attach(transfer.token);
+  throw error;
+}
+```
+
+<span id="interfaces"></span>
+
+## Canonical WebIDL interfaces
+
+These declarations are generated directly from the Framework’s Explorer WebIDL, including helper option dictionaries. Use the Playground Capability Lab to exercise navigation, messaging, storage, dialogs, and transfers.
+
+<ExplorerReference locale="en" client:load />

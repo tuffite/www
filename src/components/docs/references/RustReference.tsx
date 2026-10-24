@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { ExternalLink, Search } from 'lucide-react';
-import { articles, articlePath, t, type Locale } from '@/content';
+import { useUiTranslation, type Locale } from '@/i18n';
 import reference from '@/reference.generated.json';
 
 export function RustReference({ locale }: { locale: Locale }) {
+  const { t } = useUiTranslation(locale);
   const [filter, setFilter] = useState('');
   return (
     <div className="reference-browser">
@@ -12,8 +13,8 @@ export function RustReference({ locale }: { locale: Locale }) {
         <input
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          placeholder={t('Filter public Rust symbols…', '筛选 Rust 公共符号…')[locale]}
-          aria-label={t('Filter Rust API', '筛选 Rust API')[locale]}
+          placeholder={t('rust.filterPlaceholder')}
+          aria-label={t('rust.filterLabel')}
         />
       </label>
       <div className="symbol-grid">
@@ -24,24 +25,11 @@ export function RustReference({ locale }: { locale: Locale }) {
           ))}
       </div>
       <p className="small-note">
-        {
-          t(
-            'Full signatures, trait implementations, and examples are available in the generated Rustdoc.',
-            '完整签名、trait 实现和示例可在生成的 Rustdoc 中查看。',
-          )[locale]
-        }{' '}
+        {t('rust.rustdocNote')}{' '}
         <a href="/api/rust/tuffite/">
           Rustdoc <ExternalLink size={12} />
         </a>{' '}
-        ·{' '}
-        <a
-          href={articlePath(
-            articles.find((article) => article.kind === 'explorer')!,
-            locale,
-          )}
-        >
-          {t('Explorer DOM API', 'Explorer DOM API')[locale]}
-        </a>
+        · <a href={`/${locale}/references/explorer/`}>{t('rust.explorerLink')}</a>
       </p>
     </div>
   );

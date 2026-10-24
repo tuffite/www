@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { ExternalLink, Search } from 'lucide-react';
-import { t, type Locale } from '@/content';
+import { useUiTranslation, type Locale } from '@/i18n';
 import { CodeBlock } from '@/components/docs/CodeBlock';
 import reference from '@/reference.generated.json';
 
 export function ExplorerReference({ locale }: { locale: Locale }) {
+  const { t } = useUiTranslation(locale);
   const [filter, setFilter] = useState('');
   return (
     <div className="reference-browser">
@@ -13,10 +14,8 @@ export function ExplorerReference({ locale }: { locale: Locale }) {
         <input
           value={filter}
           onChange={(event) => setFilter(event.target.value)}
-          placeholder={
-            t('Filter Explorer interfaces or members…', '筛选 Explorer 接口或成员…')[locale]
-          }
-          aria-label={t('Filter Explorer API', '筛选 Explorer API')[locale]}
+          placeholder={t('explorer.filterPlaceholder')}
+          aria-label={t('explorer.filterLabel')}
         />
       </label>
       {reference.explorer
@@ -29,7 +28,7 @@ export function ExplorerReference({ locale }: { locale: Locale }) {
               <a
                 href={`https://github.com/tuffite/tuffite/blob/main/components/explorer/renderer/blink/${value.file}`}
               >
-                {t('View source', '查看源码')[locale]} <ExternalLink size={12} />
+                {t('common.viewSource')} <ExternalLink size={12} />
               </a>
             </div>
           </div>

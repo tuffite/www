@@ -1,0 +1,39 @@
+---
+title: 'tuffite.json'
+description: '基于权威 schema 生成、可搜索的配置参考。'
+---
+
+import { ConfigurationReference } from '@/components/docs/references/ConfigurationReference';
+
+:::caution[实验性源码版本]
+生产安全加固与 SDK 发布仍在进行中。
+:::
+
+<span id="manifest"></span>
+
+## 应用配置文件
+
+根对象要求 `app` 和 `build`。`app` 定义 `identifier`、`security` 和 `assets`，`build.mojomSources` 定义代码生成。`productName` 与 `bundle` 可选。源配置和打包后的应用 manifest 都没有 `schemaVersion`。`additionalProperties` 为 `false` 时拒绝未知属性。使用 `tuff check` 验证；类型正确并不代表路由和权限语义正确。
+
+```json
+{
+  "$schema": "https://tuffite.org/schema/v2/tuffite.schema.json",
+  "productName": "My App",
+  "app": {
+    "identifier": "org.example.myapp",
+    "security": { "capabilities": [] },
+    "assets": []
+  },
+  "build": {
+    "mojomSources": ["shell_api.mojom"]
+  }
+}
+```
+
+<span id="fields"></span>
+
+## 浏览配置类型
+
+下面的字段、必填标记、枚举、联合类型和引用直接来自 `schemas/tuffite.schema.json`。可以按字段或类型名称筛选。没有显示默认值，表示 schema 未声明默认值。
+
+<ConfigurationReference locale="zh" client:load />

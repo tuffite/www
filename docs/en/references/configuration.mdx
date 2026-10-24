@@ -1,0 +1,39 @@
+---
+title: 'tuffite.json'
+description: 'A searchable configuration reference generated from the canonical schema.'
+---
+
+import { ConfigurationReference } from '@/components/docs/references/ConfigurationReference';
+
+:::caution[Experimental source release]
+Production hardening and published SDK packages are still in progress.
+:::
+
+<span id="manifest"></span>
+
+## The application manifest
+
+The root requires `app` and `build`. `app` defines `identifier`, `security`, and `assets`; `build.mojomSources` defines code generation. `productName` and `bundle` are optional. Source and packaged application manifests have no `schemaVersion`. Unknown properties are rejected where `additionalProperties` is `false`. Validate with `tuff check`; type correctness alone does not guarantee route or permission semantics.
+
+```json
+{
+  "$schema": "https://tuffite.org/schema/v2/tuffite.schema.json",
+  "productName": "My App",
+  "app": {
+    "identifier": "org.example.myapp",
+    "security": { "capabilities": [] },
+    "assets": []
+  },
+  "build": {
+    "mojomSources": ["shell_api.mojom"]
+  }
+}
+```
+
+<span id="fields"></span>
+
+## Explore configuration types
+
+Fields, required markers, enums, unions, and references below come directly from `schemas/tuffite.schema.json`. Filter by field or type name. A missing default means the schema does not declare one.
+
+<ConfigurationReference locale="en" client:load />

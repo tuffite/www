@@ -1,0 +1,75 @@
+{
+  "common": {
+    "copy": "Copy code",
+    "copied": "Copied",
+    "selectToCopy": "Select code to copy",
+    "viewSource": "View source"
+  },
+  "configuration": {
+    "noResults": "No matching fields or types.",
+    "fields": {
+      "root": {
+        "productName": "Application display and bundle name; defaults to the Cargo package name.",
+        "$schema": "JSON Schema URL used by editor validation.",
+        "app": "Application identity, security, windows, native API, and assets.",
+        "build": "Code generation, development package, web server, and debugging settings.",
+        "bundle": "Resources included in the application package."
+      },
+      "app": {
+        "identifier": "Application identifier, conventionally in reverse-domain form.",
+        "security": "Content security policy and origin-scoped capabilities.",
+        "windows": "Initial native window configurations.",
+        "assets": "Explicit mappings from request origins/paths to resource files.",
+        "network": "Application network policy."
+      },
+      "build": {
+        "mojomSources": "Root-relative Mojom contract files for typed code generation.",
+        "devPackage": "Directory of the refreshed native development package.",
+        "devUrl": "Loopback frontend URL used by the authenticated dev override.",
+        "beforeDevCommand": "Command started before the native development window.",
+        "devtoolsPort": "Loopback Chrome DevTools Protocol port."
+      },
+      "bundle": {
+        "resources": "Application files and directories to include in the package."
+      },
+      "security": {
+        "csp": "Frontend Content-Security-Policy.",
+        "capabilities": "Native permissions for explicitly matched origins."
+      },
+      "window": {
+        "label": "Application-visible window label.",
+        "url": "Initial page URL for the native window.",
+        "width": "Initial window width.",
+        "height": "Initial window height."
+      }
+    },
+    "filterPlaceholder": "Filter fields and configuration types…",
+    "filterLabel": "Filter configuration fields",
+    "schema": "Canonical JSON Schema",
+    "object": "object",
+    "strict": "No unknown fields",
+    "required": "required",
+    "default": "Default",
+    "pattern": "Pattern"
+  },
+  "explorer": {
+    "filterPlaceholder": "Filter Explorer interfaces or members…",
+    "filterLabel": "Filter Explorer API"
+  },
+  "mojom": {
+    "filterPlaceholder": "Filter modules or method names…",
+    "filterLabel": "Filter JavaScript API",
+    "methods_one": "{{count}} method",
+    "methods_other": "{{count}} methods"
+  },
+  "javascript": {
+    "filterPlaceholder": "Filter exports, types, or member names…",
+    "filterLabel": "Filter JavaScript package exports"
+  },
+  "rust": {
+    "filterPlaceholder": "Filter public Rust symbols…",
+    "filterLabel": "Filter Rust API",
+    "rustdocNote": "Full signatures, trait implementations, and examples are available in the generated Rustdoc.",
+    "explorerLink": "Explorer DOM API"
+  }
+}

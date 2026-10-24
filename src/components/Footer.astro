@@ -1,0 +1,14 @@
+---
+import Footer from '@astrojs/starlight/components/Footer.astro';
+const zh = Astro.locals.starlightRoute.locale === 'zh';
+---
+
+<Footer {...Astro.props}>
+  <slot />
+</Footer>
+<p class="license-footer">
+  © {new Date().getUTCFullYear()} Tuffite {zh ? '贡献者' : 'contributors'} ·
+  <a href="/LICENSE.txt">MIT OR Apache-2.0</a> ·
+  <a href="/THIRD_PARTY_NOTICES.txt">{zh ? '源码声明' : 'Source notices'}</a> ·
+  <a href="/THIRD_PARTY_LICENSES.md">{zh ? '依赖许可证' : 'Dependency licenses'}</a>
+</p>

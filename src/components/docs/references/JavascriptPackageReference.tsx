@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { ChevronDown, Code2, ExternalLink, Search } from 'lucide-react';
-import { t, type Locale } from '@/content';
+import { useUiTranslation, type Locale } from '@/i18n';
 import { CodeBlock } from '@/components/docs/CodeBlock';
 import reference from '@/reference.generated.json';
 
 export function JavascriptPackageReference({ locale }: { locale: Locale }) {
+  const { t } = useUiTranslation(locale);
   const [filter, setFilter] = useState('');
   return (
     <div className="reference-browser">
@@ -13,10 +14,8 @@ export function JavascriptPackageReference({ locale }: { locale: Locale }) {
         <input
           value={filter}
           onChange={(event) => setFilter(event.target.value)}
-          placeholder={
-            t('Filter exports, types, or member names…', '筛选导出、类型或成员名称…')[locale]
-          }
-          aria-label={t('Filter JavaScript package exports', '筛选 JavaScript 包导出')[locale]}
+          placeholder={t('javascript.filterPlaceholder')}
+          aria-label={t('javascript.filterLabel')}
         />
       </label>
       {reference.javascriptExports
@@ -35,7 +34,7 @@ export function JavascriptPackageReference({ locale }: { locale: Locale }) {
               <a
                 href={`https://github.com/tuffite/tuffite/blob/main/packages/tuffite/${value.file}`}
               >
-                {t('View source', '查看源码')[locale]} <ExternalLink size={12} />
+                {t('common.viewSource')} <ExternalLink size={12} />
               </a>
             </div>
           </details>

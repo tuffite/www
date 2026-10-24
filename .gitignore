@@ -14,3 +14,6 @@ mise.local.toml
 
 public/LICENSE.txt
 public/THIRD_PARTY_NOTICES.txt
+
+.astro/
+.wrangler/
