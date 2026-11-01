@@ -57,6 +57,7 @@ export default defineConfig({
             'guides/project-structure',
             'guides/commands',
             'guides/security',
+            'guides/isolated-worlds',
             'guides/windows',
             'guides/process-model',
             'guides/distribution',
