@@ -1,0 +1,54 @@
+{
+  "languages": {
+    "JavaScript": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "TypeScript": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "TSX": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "HTML": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "CSS": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "JSON": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "JSONC": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "Astro": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "Markdown": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    },
+    "MDX": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "formatter": "prettier"
+    }
+  }
+}
